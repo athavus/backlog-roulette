@@ -141,7 +141,7 @@ function App() {
                       {game.genres.slice(0, 3).map((genre, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs rounded-full font-medium"
+                          className="px-2 py-1 bg-zinc-500 text-white text-xs rounded-full font-medium"
                         >
                           {genre.name}
                         </span>
