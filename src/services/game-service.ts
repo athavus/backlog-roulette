@@ -1,4 +1,4 @@
-import type { APIResponse } from '../types/game';
+import type { APIResponse } from '../types/game-input';
 import { API_CONFIG } from '../config/api';
 
 export class GameService {

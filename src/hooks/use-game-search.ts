@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Game } from '../types/game';
-import { GameService } from '../services/gameService';
+import type { Game } from '../types/game-input';
+import { GameService } from '../services/game-service';
 import { API_CONFIG } from '../config/api';
-import { useDebounce } from './useDebounce';
+import { useDebounce } from './use-debounce';
 
 interface UseGameSearchReturn {
   games: Game[];

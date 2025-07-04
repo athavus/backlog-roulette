@@ -1,12 +1,8 @@
-import React from 'react';
-import type { Game } from '../../types/game';
-import { GameCard } from './game-card';
+// Importando Componente para o Card
+import { GameCard } from './card';
 
-interface SuggestionsListProps {
-  games: Game[];
-  onSelectGame: (game: Game) => void;
-  visible: boolean;
-}
+// Importando Tipos
+import type { SuggestionsListProps } from '../../types/game-input';
 
 export const SuggestionsList: React.FC<SuggestionsListProps> = ({
   games,

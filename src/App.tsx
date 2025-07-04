@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { GameSearchInput } from './components/game-search-input';
 import { GameModal } from './components/game-modal';
-import type { Game } from './types/game';
+import type { Game } from './types/game-input';
 
 function App() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);

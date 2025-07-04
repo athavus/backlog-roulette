@@ -1,5 +1,5 @@
 export { GameSearchInput } from './game-search-input';
-export { GameCard } from './game-card';
+export { GameCard } from './card';
 export { SearchInput } from './search-input';
 export { SuggestionsList } from './suggestions-list';
 export { LoadingIndicator } from './loading-indicator';

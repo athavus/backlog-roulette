@@ -1,15 +1,4 @@
-import React from 'react';
-
-interface SearchInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  onFocus: () => void;
-  onBlur: () => void;
-  onKeyDown: (e: React.KeyboardEvent) => void;
-  showSuggestions: boolean;
-  placeholder?: string;
-  className?: string;
-}
+import type { SearchInputProps } from '../../types/game-input';
 
 export const SearchInput: React.FC<SearchInputProps> = ({
   value,

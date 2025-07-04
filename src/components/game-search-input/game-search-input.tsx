@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import type { Game } from '../../types/game';
-import { useGameSearch } from '../../hooks/useGameSearch';
+import { useState } from 'react';
+import { useGameSearch } from '../../hooks/use-game-search';
 import { SearchInput } from './search-input';
 import { SuggestionsList } from './suggestions-list';
 import { LoadingIndicator } from './loading-indicator';
@@ -8,11 +7,7 @@ import { ErrorMessage } from './error-message';
 import { EmptyState } from './empty-state';
 import { API_CONFIG } from '../../config/api';
 
-interface GameSearchInputProps {
-  onGameSelect?: (game: Game) => void;
-  placeholder?: string;
-  className?: string;
-}
+import type { Game, GameSearchInputProps } from '../../types/game-input';
 
 export const GameSearchInput: React.FC<GameSearchInputProps> = ({
   onGameSelect,

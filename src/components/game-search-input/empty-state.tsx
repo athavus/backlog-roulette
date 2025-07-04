@@ -1,9 +1,4 @@
-import React from 'react';
-
-interface EmptyStateProps {
-  searchTerm: string;
-  visible: boolean;
-}
+import type { EmptyStateProps } from "../../types/game-input";
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
   searchTerm,

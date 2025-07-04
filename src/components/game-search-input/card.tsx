@@ -1,11 +1,6 @@
-import React from 'react';
-import type { Game } from '../../types/game';
 import { formatDate } from '../../utils/date';
 
-interface GameCardProps {
-  game: Game;
-  onSelect: (game: Game) => void;
-}
+import type { GameCardProps } from '../../types/game-input';
 
 export const GameCard: React.FC<GameCardProps> = ({ game, onSelect }) => {
   const handleClick = () => onSelect(game);

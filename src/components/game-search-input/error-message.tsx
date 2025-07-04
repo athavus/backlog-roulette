@@ -1,9 +1,4 @@
-import React from 'react';
-
-interface ErrorMessageProps {
-  error: string | null;
-  onDismiss?: () => void;
-}
+import type { ErrorMessageProps } from "../../types/game-input";
 
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({
   error,

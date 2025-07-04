@@ -1,9 +1,4 @@
-import React from 'react';
-
-interface LoadingIndicatorProps {
-  visible: boolean;
-  message?: string;
-}
+import type { LoadingIndicatorProps } from '../../types/game-input';
 
 export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
   visible,
