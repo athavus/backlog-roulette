@@ -4,8 +4,12 @@ export interface Game {
   background_image: string;
   rating: number;
   released: string;
-  genres: { name: string }[];
-  platforms: { platform: { name: string } }[];
+  genres: {
+    [x: string]: Key | null | undefined; name: string 
+}[];
+  platforms: { platform: {
+    id: any; name: string 
+} }[];
   metacritic?: number;
 }
 

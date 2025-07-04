@@ -1,9 +1,20 @@
+import { useState } from 'react';
 import { GameSearchInput } from './components/game-search-input';
+import { GameModal } from './components/game-modal';
 import type { Game } from './types/game';
 
 function App() {
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleGameSelect = (game: Game) => {
-    console.log('Jogo selecionado:', game);
+    setSelectedGame(game);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedGame(null);
   };
 
   return (
@@ -15,6 +26,12 @@ function App() {
           className="mx-auto"
         />
       </div>
+      
+      <GameModal
+        game={selectedGame}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 }
