@@ -1,6 +1,8 @@
+//Tipos
+import type { GameModalHeaderProps } from '../../types/game-modal';
+//Bibliotecas
 import { X } from 'lucide-react';
 
-import type { GameModalHeaderProps } from '../../types/game-modal';
 
 export const GameModalHeader: React.FC<GameModalHeaderProps> = ({ 
   gameName, 

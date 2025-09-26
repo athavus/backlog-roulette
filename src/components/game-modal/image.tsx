@@ -1,6 +1,8 @@
+//Tipos
+import type { GameImageProps } from '../../types/game-modal';
+//Bibliotecas
 import { Gamepad2 } from 'lucide-react';
 
-import type { GameImageProps } from '../../types/game-modal';
 
 export const GameImage: React.FC<GameImageProps> = ({ 
   backgroundImage, 

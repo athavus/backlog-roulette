@@ -1,7 +1,10 @@
-import { Calendar, Award } from 'lucide-react';
-import { formatDate } from '../../utils/date';
-
+//Tipos
 import type { GameInfoProps } from '../../types/game-modal';
+//Utilitários para componentes
+import { formatDate } from '../../utils/date';
+//Bibliotecas
+import { Calendar, Award } from 'lucide-react';
+
 
 export const GameInfo: React.FC<GameInfoProps> = ({ released, metacritic }) => {
   return (

@@ -1,6 +1,10 @@
+//Componentes
 import { GameModalHeader } from './modal-header';
 import { GameDetails } from './details';
+import { BacklogButtons } from './backlog-buttons';
+//Tipos
 import type { GameModalProps } from '../../types/game-modal';
+
 
 export const GameModal: React.FC<GameModalProps> = ({ 
   game, 
@@ -17,6 +21,7 @@ export const GameModal: React.FC<GameModalProps> = ({
           onClose={onClose} 
         />
         <GameDetails game={game} />
+        <BacklogButtons game={game}/>
       </div>
     </div>
   );

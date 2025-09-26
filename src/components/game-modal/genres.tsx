@@ -1,3 +1,4 @@
+//Tipos
 import type { GameGenresProps } from '../../types/game-modal';
 
 

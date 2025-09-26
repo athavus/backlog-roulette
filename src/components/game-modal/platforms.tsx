@@ -1,5 +1,6 @@
+//Bibliotecas
 import { Globe } from 'lucide-react';
-
+//Componentes
 import type { GamePlatformsProps } from '../../types/game-modal';
 
 export const GamePlatforms: React.FC<GamePlatformsProps> = ({ platforms }) => {
