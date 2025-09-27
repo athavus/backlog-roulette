@@ -1,23 +1,20 @@
 import { useState } from 'react';
 import { GameSearchInput } from './components/game-search-input';
 import { GameModal } from './components/game-modal';
-import { RouletteModal } from './components/roulette/modal';
-import { RouletteButton } from './components/roulette/button';
+import { RouletteSidebar } from './components/roulette/sidebar';
+import { BacklogTitle } from './components/title/index.tsx'
 import { useRoulette } from './hooks/use-roulette';
 import type { Game } from './types/game-input';
 
 function App() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isRouletteModalOpen, setIsRouletteModalOpen] = useState(false);
-  
   const {
     games: rouletteGames,
     addGame,
     removeGame,
     isGameInRoulette,
-    spinRoulette,
-    totalGames
+    spinRoulette
   } = useRoulette();
 
   const handleGameSelect = (game: Game) => {
@@ -38,24 +35,22 @@ function App() {
     }
   };
 
-  const handleOpenRouletteModal = () => {
-    setIsRouletteModalOpen(true);
-  };
-
-  const handleCloseRouletteModal = () => {
-    setIsRouletteModalOpen(false);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
-        <GameSearchInput
-          onGameSelect={handleGameSelect}
-          placeholder="Digite o nome do jogo que você procura..."
-          className="mx-auto"
-        />
+    <div className="min-h-screen bg-gray-50 flex p-4">
+      {/* Área principal centralizada */}
+      <div className="flex-1 flex flex-col items-center justify-center pr-80">
+        <BacklogTitle />
+
+        {/* Input de busca */}
+        <div className="w-full max-w-2xl mt-[1%] ml-[13%]">
+          <GameSearchInput
+            onGameSelect={handleGameSelect}
+            placeholder="Digite o nome do jogo que você procura..."
+            className="w-full outline-none"
+          />
+        </div>
       </div>
-      
+
       {/* Modal do Jogo */}
       <GameModal
         game={selectedGame}
@@ -65,18 +60,8 @@ function App() {
         isInRoulette={selectedGame ? isGameInRoulette(selectedGame.id) : false}
       />
 
-      {/* Botão da Roleta - Só aparece se tiver jogos */}
-      {totalGames > 0 && (
-        <RouletteButton 
-          gameCount={totalGames}
-          onClick={handleOpenRouletteModal}
-        />
-      )}
-
-      {/* Modal da Roleta */}
-      <RouletteModal
-        isOpen={isRouletteModalOpen}
-        onClose={handleCloseRouletteModal}
+      {/* Sidebar fixa da Roleta */}
+      <RouletteSidebar
         games={rouletteGames}
         onSpin={spinRoulette}
         onRemoveGame={removeGame}
