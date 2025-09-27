@@ -22,16 +22,6 @@ export function BacklogButtons({
         text={inRoleta ? "Remover da Roleta" : "Adicionar a Roleta"} 
         onClick={onToggleRoleta}
       />
-      <BacklogButton 
-        icon={<Eye className="w-5 h-5" />} 
-        text="Review" 
-        onClick={onReview}
-      />
-      <BacklogButton 
-        icon={<ListPlus className="w-5 h-5" />} 
-        text="Adicionar a Lista" 
-        onClick={onAddToList}
-      />
     </div>
   );
 }
