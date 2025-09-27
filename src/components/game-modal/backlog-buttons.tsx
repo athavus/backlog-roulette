@@ -1,9 +1,6 @@
-//Componentes
-import { BacklogButton } from "./backlog-button.tsx";
-//Bibliotecas
-import { ReactNode } from "react"
-import { Eye, Shuffle, ListPlus } from "lucide-react"
-
+import { BacklogButton } from "./backlog-button";
+import { ReactNode } from "react";
+import { Eye, Shuffle, ListPlus } from "lucide-react";
 
 interface BacklogButtonsProps {
   inRoleta: boolean;
@@ -12,18 +9,29 @@ interface BacklogButtonsProps {
   onAddToList: () => void;
 }
 
-export function BacklogButtons(
+export function BacklogButtons({
   inRoleta,
   onToggleRoleta,
   onReview,
   onAddToList
-): BacklogButtonsProps {
+}: BacklogButtonsProps) {
   return (
-    <div className="flex justify-between gap-2 mt-4">
-      <BacklogButton icon={<Shuffle className="w-5 h-5" />} text={inRoleta ? "Remover da Roleta" : "Adicionar a Roleta"} onClick={onToggleRoleta}/>
-      <BacklogButton icon={<Eye className="w-5 h-5" />} text="Review" onClick={onReview}/>
-      <BacklogButton icon={<ListPlus className="w-5 h-5" />} text="Adicionar a Lista" onClick={onAddToList}/>
+    <div className="flex justify-between gap-2 mt-4 px-6 pb-6">
+      <BacklogButton 
+        icon={<Shuffle className="w-5 h-5" />} 
+        text={inRoleta ? "Remover da Roleta" : "Adicionar a Roleta"} 
+        onClick={onToggleRoleta}
+      />
+      <BacklogButton 
+        icon={<Eye className="w-5 h-5" />} 
+        text="Review" 
+        onClick={onReview}
+      />
+      <BacklogButton 
+        icon={<ListPlus className="w-5 h-5" />} 
+        text="Adicionar a Lista" 
+        onClick={onAddToList}
+      />
     </div>
   );
 }
-

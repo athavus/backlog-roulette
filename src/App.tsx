@@ -1,11 +1,24 @@
 import { useState } from 'react';
 import { GameSearchInput } from './components/game-search-input';
 import { GameModal } from './components/game-modal';
+import { RouletteModal } from './components/roulette/modal';
+import { RouletteButton } from './components/roulette/button';
+import { useRoulette } from './hooks/use-roulette';
 import type { Game } from './types/game-input';
 
 function App() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRouletteModalOpen, setIsRouletteModalOpen] = useState(false);
+  
+  const {
+    games: rouletteGames,
+    addGame,
+    removeGame,
+    isGameInRoulette,
+    spinRoulette,
+    totalGames
+  } = useRoulette();
 
   const handleGameSelect = (game: Game) => {
     setSelectedGame(game);
@@ -15,6 +28,22 @@ function App() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedGame(null);
+  };
+
+  const handleToggleRoulette = (game: { id: number; name: string }) => {
+    if (isGameInRoulette(game.id)) {
+      removeGame(game.id);
+    } else {
+      addGame(game);
+    }
+  };
+
+  const handleOpenRouletteModal = () => {
+    setIsRouletteModalOpen(true);
+  };
+
+  const handleCloseRouletteModal = () => {
+    setIsRouletteModalOpen(false);
   };
 
   return (
@@ -27,10 +56,30 @@ function App() {
         />
       </div>
       
+      {/* Modal do Jogo */}
       <GameModal
         game={selectedGame}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        onToggleRoulette={handleToggleRoulette}
+        isInRoulette={selectedGame ? isGameInRoulette(selectedGame.id) : false}
+      />
+
+      {/* Botão da Roleta - Só aparece se tiver jogos */}
+      {totalGames > 0 && (
+        <RouletteButton 
+          gameCount={totalGames}
+          onClick={handleOpenRouletteModal}
+        />
+      )}
+
+      {/* Modal da Roleta */}
+      <RouletteModal
+        isOpen={isRouletteModalOpen}
+        onClose={handleCloseRouletteModal}
+        games={rouletteGames}
+        onSpin={spinRoulette}
+        onRemoveGame={removeGame}
       />
     </div>
   );
