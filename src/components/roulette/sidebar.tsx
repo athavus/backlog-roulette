@@ -43,15 +43,18 @@ export const RouletteSidebar: React.FC<RouletteSidebarProps> = ({
       {/* Botão de collapse */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute left-[-24px] top-4 bg-white border border-gray-200 rounded-full shadow p-1 hover:bg-gray-50"
+        className="absolute left-[6px] top-[22px] bg-none opacity-60 hover:opacity-100 transition-opacity"
       >
-        {collapsed ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+        {collapsed 
+          ? <div className="flex -space-x-1"><ChevronLeft size={16} /><ChevronLeft size={16} /></div> 
+          : <div className="flex -space-x-1"><ChevronRight size={16} /><ChevronRight size={16} /></div>
+        }
       </button>
 
       {!collapsed && (
         <>
           {/* Header */}
-          <div className="flex justify-between items-center p-4 border-b">
+          <div className="flex justify-center items-center p-4 border-b">
             <h2 className="text-xl font-bold text-gray-900">Roleta</h2>
           </div>
 
