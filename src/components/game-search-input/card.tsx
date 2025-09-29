@@ -2,8 +2,8 @@ import { formatDate } from '../../utils/date';
 
 import type { GameCardProps } from '../../types/game-input';
 
-export const GameCard: React.FC<GameCardProps> = ({ game, onSelect }) => {
-  const handleClick = () => onSelect(game);
+export function GameCard({ game, onSelect }:GameCardProps) {
+   const handleClick = () => onSelect(game);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -59,5 +59,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onSelect }) => {
         </div>
       </div>
     </div>
-  );
-};
+  ); 
+}
+

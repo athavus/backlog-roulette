@@ -3,29 +3,15 @@ import { GameDetails } from './details';
 import { BacklogButtons } from './backlog-buttons';
 import type { GameModalProps } from '../../types/game-modal';
 
-export const GameModal: React.FC<GameModalProps> = ({ 
-  game, 
-  isOpen, 
-  onClose,
-  onToggleRoulette,
-  isInRoulette = false
-}) => {
-  if (!isOpen || !game) return null;
-
+export function GameModal({ game, isOpen, onClose, onToggleRoulette, isInRoulette }:GameModalProps) {
+  if (!isOpen || !game) {
+    return null;
+  }
+  
   const handleToggleRoulette = () => {
     if (onToggleRoulette && game) {
       onToggleRoulette({ id: game.id, name: game.name });
     }
-  };
-
-  const handleReview = () => {
-    // Implementar funcionalidade de review
-    console.log('Review do jogo:', game.name);
-  };
-
-  const handleAddToList = () => {
-    // Implementar funcionalidade de adicionar à lista
-    console.log('Adicionar à lista:', game.name);
   };
 
   return (
@@ -45,4 +31,5 @@ export const GameModal: React.FC<GameModalProps> = ({
       </div>
     </div>
   );
-};
+}
+

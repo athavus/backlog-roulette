@@ -3,11 +3,7 @@ import type { GameImageProps } from '../../types/game-modal';
 //Bibliotecas
 import { Gamepad2 } from 'lucide-react';
 
-
-export const GameImage: React.FC<GameImageProps> = ({ 
-  backgroundImage, 
-  gameName 
-}) => {
+export function GameImage({ backgroundImage, gameName }:GameImageProps) {
   return (
     <div className="lg:order-last">
       {backgroundImage ? (
@@ -24,4 +20,5 @@ export const GameImage: React.FC<GameImageProps> = ({
       )}
     </div>
   );
-};
+}
+

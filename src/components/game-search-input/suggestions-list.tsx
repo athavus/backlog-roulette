@@ -4,12 +4,10 @@ import { GameCard } from './card';
 // Importando Tipos
 import type { SuggestionsListProps } from '../../types/game-input';
 
-export const SuggestionsList: React.FC<SuggestionsListProps> = ({
-  games,
-  onSelectGame,
-  visible,
-}) => {
-  if (!visible || games.length === 0) return null;
+export function SuggestionsList({ games, onSelectGame, visible }:SuggestionsListProps) {
+  if (!visible || games.length === 0) {
+    return null;
+  }
 
   return (
     <div
@@ -26,4 +24,5 @@ export const SuggestionsList: React.FC<SuggestionsListProps> = ({
       ))}
     </div>
   );
-};
+}
+

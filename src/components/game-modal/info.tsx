@@ -5,8 +5,7 @@ import { formatDate } from '../../utils/date';
 //Bibliotecas
 import { Calendar, Award } from 'lucide-react';
 
-
-export const GameInfo: React.FC<GameInfoProps> = ({ released, metacritic }) => {
+export function GameInfo({ released, metacritic }:GameInfoProps) {
   return (
     <div className="space-y-4">
       {released && (
@@ -28,4 +27,5 @@ export const GameInfo: React.FC<GameInfoProps> = ({ released, metacritic }) => {
       )}
     </div>
   );
-};
+}
+

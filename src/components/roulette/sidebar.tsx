@@ -1,22 +1,9 @@
 import React, { useState } from 'react';
 import { X, Shuffle, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 
-interface RouletteGame {
-  id: number;
-  name: string;
-}
+import type { RouletteGame, RouletteSidebarProps } from '../../types/roulette';
 
-interface RouletteSidebarProps {
-  games: RouletteGame[];
-  onSpin: () => RouletteGame | null;
-  onRemoveGame: (gameId: number) => void;
-}
-
-export const RouletteSidebar: React.FC<RouletteSidebarProps> = ({
-  games,
-  onSpin,
-  onRemoveGame
-}) => {
+export function RouletteSidebar({ games, onSpin, onRemoveGame }:RouletteSidebarProps) {
   const [selectedGame, setSelectedGame] = useState<RouletteGame | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -138,4 +125,5 @@ export const RouletteSidebar: React.FC<RouletteSidebarProps> = ({
       )}
     </div>
   );
-};
+}
+

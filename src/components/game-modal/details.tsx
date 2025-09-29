@@ -6,9 +6,10 @@ import { GameImage } from './image';
 //Tipos
 import type { GameDetailsProps } from '../../types/game-modal';
 
-
-export const GameDetails: React.FC<GameDetailsProps> = ({ game }) => {
-  if (!game) return null;
+export function GameDetails({ game }:GameDetailsProps) {
+  if (!game) {
+    return null;
+  }
 
   return (
     <div className="p-6">
@@ -29,4 +30,5 @@ export const GameDetails: React.FC<GameDetailsProps> = ({ game }) => {
       </div>
     </div>
   );
-};
+}
+

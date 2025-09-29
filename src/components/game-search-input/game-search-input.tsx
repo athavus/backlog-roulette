@@ -9,11 +9,7 @@ import { API_CONFIG } from '../../config/api';
 
 import type { Game, GameSearchInputProps } from '../../types/game-input';
 
-export const GameSearchInput: React.FC<GameSearchInputProps> = ({
-  onGameSelect,
-  placeholder,
-  className = "",
-}) => {
+export function GameSearchInput({ onGameSelect, placeholder, className }:GameSearchInputProps) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   
   const {
@@ -77,4 +73,5 @@ export const GameSearchInput: React.FC<GameSearchInputProps> = ({
       />
     </div>
   );
-};
+}
+

@@ -3,8 +3,10 @@ import { Globe } from 'lucide-react';
 //Componentes
 import type { GamePlatformsProps } from '../../types/game-modal';
 
-export const GamePlatforms: React.FC<GamePlatformsProps> = ({ platforms }) => {
-  if (!platforms || platforms.length === 0) return null;
+export function GamePlatforms({ platforms }:GamePlatformsProps) {
+  if (!platforms || platforms.length === 0) {
+    return null;
+  }
 
   return (
     <div>
@@ -24,4 +26,5 @@ export const GamePlatforms: React.FC<GamePlatformsProps> = ({ platforms }) => {
       </div>
     </div>
   );
-};
+}
+

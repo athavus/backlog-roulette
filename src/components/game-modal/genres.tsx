@@ -1,9 +1,10 @@
 //Tipos
 import type { GameGenresProps } from '../../types/game-modal';
 
-
-export const GameGenres: React.FC<GameGenresProps> = ({ genres }) => {
-  if (!genres || genres.length === 0) return null;
+export function GameGenres({ genres }:GameGenresProps) {
+  if (!genres || genres.length === 0) {
+    return null;
+  }
 
   return (
     <div>
@@ -20,4 +21,5 @@ export const GameGenres: React.FC<GameGenresProps> = ({ genres }) => {
       </div>
     </div>
   );
-};
+}
+

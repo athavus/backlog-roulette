@@ -1,15 +1,6 @@
 import type { SearchInputProps } from '../../types/game-input';
 
-export const SearchInput: React.FC<SearchInputProps> = ({
-  value,
-  onChange,
-  onFocus,
-  onBlur,
-  onKeyDown,
-  showSuggestions,
-  placeholder = "Digite o nome do jogo...",
-  className = "",
-}) => {
+export function SearchInput({ value, onChange, onFocus, onBlur, onKeyDown, showSuggestions, placeholder = "Digite o nome do jogo...", className = ""}:SearchInputProps) {
   return (
     <input
       type="text"
@@ -25,4 +16,5 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       aria-autocomplete="list"
     />
   );
-};
+}
+
