@@ -14,6 +14,14 @@ export function GameModal({ game, isOpen, onClose, onToggleRoulette, isInRoulett
     }
   };
 
+  const handleReview = () => {
+    console.log(`${game}`);
+  };
+
+  const handleAddToList = () => {
+    console.log(`${game}`);
+  };
+ 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
