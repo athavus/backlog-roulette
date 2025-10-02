@@ -4,6 +4,8 @@ export interface GameModalProps {
   game: Game | null;
   isOpen: boolean;
   onClose: () => void;
+  onToggleRoulette: (game: Game) => void;
+  isInRoulette: boolean;
 }
 
 interface Platform {

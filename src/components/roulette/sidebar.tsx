@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Shuffle, Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+import { Shuffle, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import type { RouletteGame, RouletteSidebarProps } from '../../types/roulette';
 
@@ -101,7 +101,7 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }:RouletteSidebarP
                   Jogos na Roleta ({games.length})
                 </h3>
                 <div className="space-y-2 h-[75%] overflow-y-auto">
-                  {games.map((game) => (
+                  {games.map((game: string) => (
                     <div
                       key={game.id}
                       className="flex justify-between items-center p-2 bg-gray-50 rounded"

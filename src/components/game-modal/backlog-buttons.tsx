@@ -1,20 +1,16 @@
 import { BacklogButton } from "./backlog-button";
-import { ReactNode } from "react";
-import { Eye, Shuffle, ListPlus } from "lucide-react";
+import type { ReactNode } from "react";
+import { Shuffle } from "lucide-react";
 
 interface BacklogButtonsProps {
   inRoleta: boolean;
   onToggleRoleta: () => void;
-  onReview: () => void;
-  onAddToList: () => void;
 }
 
 export function BacklogButtons({
   inRoleta,
   onToggleRoleta,
-  onReview,
-  onAddToList
-}: BacklogButtonsProps) {
+}: BacklogButtonsProps) { 
   return (
     <div className="flex justify-between gap-2 mt-4 px-6 pb-6">
       <BacklogButton 
