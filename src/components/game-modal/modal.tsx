@@ -3,25 +3,17 @@ import { GameDetails } from './details';
 import { BacklogButtons } from './backlog-buttons';
 import type { GameModalProps } from '../../types/game-modal';
 
-export function GameModal({ game, isOpen, onClose, onToggleRoulette, isInRoulette }:GameModalProps) {
+export function GameModal({ game, isOpen, onClose, onToggleRoulette, isInRoulette }: GameModalProps) {
   if (!isOpen || !game) {
     return null;
   }
-  
+
   const handleToggleRoulette = () => {
     if (onToggleRoulette && game) {
-      onToggleRoulette({ id: game.id, name: game.name });
+      onToggleRoulette(game); // ✅ passa o objeto Game inteiro
     }
   };
 
-  const handleReview = () => {
-    console.log(`${game}`);
-  };
-
-  const handleAddToList = () => {
-    console.log(`${game}`);
-  };
- 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -32,12 +24,9 @@ export function GameModal({ game, isOpen, onClose, onToggleRoulette, isInRoulett
         <GameDetails game={game} />
         <BacklogButtons 
           inRoleta={isInRoulette}
-          onToggleRoleta={handleToggleRoulette}
-          onReview={handleReview}
-          onAddToList={handleAddToList}
+          onToggleRoleta={handleToggleRoulette} // ✅ props corretos
         />
       </div>
     </div>
   );
 }
-
