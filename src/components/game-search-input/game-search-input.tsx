@@ -6,10 +6,13 @@ import { LoadingIndicator } from './loading-indicator';
 import { ErrorMessage } from './error-message';
 import { EmptyState } from './empty-state';
 import { API_CONFIG } from '../../config/api';
-
 import type { Game, GameSearchInputProps } from '../../types/game-input';
 
-export function GameSearchInput({ onGameSelect, placeholder, className }:GameSearchInputProps) {
+export function GameSearchInput({ 
+  onGameSelect, 
+  placeholder, 
+  className 
+}: GameSearchInputProps) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   
   const {
@@ -46,7 +49,7 @@ export function GameSearchInput({ onGameSelect, placeholder, className }:GameSea
     games.length === 0;
 
   return (
-    <div className={`relative w-full max-w-md ${className}`}>
+    <div className={`relative w-full max-w-2xl sm:max-w-2xl ${className}`}>
       <SearchInput
         value={searchTerm}
         onChange={setSearchTerm}
@@ -70,8 +73,7 @@ export function GameSearchInput({ onGameSelect, placeholder, className }:GameSea
       <EmptyState
         searchTerm={searchTerm}
         visible={showEmptyState}
-      />
+      /> 
     </div>
   );
 }
-

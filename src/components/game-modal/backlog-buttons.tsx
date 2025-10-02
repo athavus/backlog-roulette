@@ -11,9 +11,17 @@ export function BacklogButtons({
   onToggleRoleta,
 }: BacklogButtonsProps) { 
   return (
-    <div className="flex justify-between gap-2 mt-4 px-6 pb-6">
+    <div className="
+      flex 
+      flex-col sm:flex-row 
+      justify-center sm:justify-between 
+      gap-2 sm:gap-2 
+      mt-4 
+      px-4 sm:px-6 
+      pb-4 sm:pb-6
+    ">
       <BacklogButton 
-        icon={<Shuffle className="w-5 h-5" />} 
+        icon={<Shuffle className="w-4 h-4 sm:w-5 sm:h-5" />} 
         text={inRoleta ? "Remover da Roleta" : "Adicionar a Roleta"} 
         onClick={onToggleRoleta}
       />

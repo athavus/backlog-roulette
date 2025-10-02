@@ -36,13 +36,13 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex p-4">
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row p-2 sm:p-4">
       {/* Área principal centralizada */}
-      <div className="flex-1 flex flex-col items-center justify-center pr-80">
+      <div className="flex-1 flex flex-col items-center justify-center lg:pr-80 px-2 sm:px-4">
         <BacklogTitle />
-
+        
         {/* Input de busca */}
-        <div className="w-full max-w-2xl mt-[1%] ml-[13%]">
+        <div className="w-full max-w-2xl mt-4 sm:mt-6 lg:mt-[1%] px-2 sm:px-0">
           <GameSearchInput
             onGameSelect={handleGameSelect}
             placeholder="Digite o nome do jogo que você procura..."
