@@ -27,7 +27,7 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }:RouletteSidebarP
         collapsed ? 'w-12' : 'w-80'
       }`}
     >
-      {/* Botão de collapse */}
+      {/* Botão de collaps */}
       <button
         onClick={() => setCollapsed(!collapsed)}
         className="absolute left-[6px] top-[22px] bg-none opacity-60 hover:opacity-100 transition-opacity"
@@ -101,7 +101,7 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }:RouletteSidebarP
                   Jogos na Roleta ({games.length})
                 </h3>
                 <div className="space-y-2 h-[75%] overflow-y-auto">
-                  {games.map((game: string) => (
+                  {games.map((game: RouletteGame) => (
                     <div
                       key={game.id}
                       className="flex justify-between items-center p-2 bg-gray-50 rounded"
