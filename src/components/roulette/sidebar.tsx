@@ -1,167 +1,175 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Shuffle, Play, ChevronLeft, ChevronRight, X, Sparkles, Clock, Trash2 } from 'lucide-react';
-import type { RouletteGame, RouletteSidebarProps } from '../../types/roulette';
 
-export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebarProps) {
-  const [selectedGame, setSelectedGame] = useState<RouletteGame | null>(null);
+const ITEM_HEIGHT = 80; // altura em pixels de cada item
+const VISIBLE_ITEMS = 5; // quantos itens são visíveis na área da roleta
+
+export function RouletteSidebar({ games, onSpin, onRemoveGame }) {
+  const [selectedGame, setSelectedGame] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [rotation, setRotation] = useState(0);
-  const [spinDuration, setSpinDuration] = useState(3);
+  const [spinDuration, setSpinDuration] = useState(5);
   const [removeAfterSpin, setRemoveAfterSpin] = useState(false);
 
-  // Gera as cores vibrantes do gradiente baseado na quantidade de jogos
-  const generateGradient = (count: number) => {
-    if (count === 0) return 'conic-gradient(from 0deg, #667eea 0deg, #764ba2 360deg)';
-    
-    const colors: string[] = [];
-    for (let i = 0; i < count; i++) {
-      const hue = (360 / count) * i;
-      colors.push(`hsl(${hue}, 85%, 60%)`);
-    }
-    
-    const step = 360 / count;
-    const gradientStops = colors
-      .map((color, i) => `${color} ${i * step}deg ${(i + 1) * step}deg`)
-      .join(', ');
-    
-    return `conic-gradient(from 0deg, ${gradientStops})`;
-  };
+  const spinTimeout = useRef();
 
-  const handleSpin = () => {
-    if (games.length === 0) return;
+  function getInitialOffset() {
+    // Posiciona o spinOffset para começo centralizado e visível no item zero
+    return -((games.length * ITEM_HEIGHT) * 2) + Math.floor(VISIBLE_ITEMS / 2) * ITEM_HEIGHT;
+  }
+
+  const [spinOffset, setSpinOffset] = useState(getInitialOffset());
+
+  function handleSpin() {
+    if (games.length === 0 || isSpinning) return;
 
     setIsSpinning(true);
-    setSelectedGame(null);
     setShowResult(false);
 
-    // Animação de rotação
-    const spins = 5 + Math.random() * 3;
-    const finalRotation = rotation + (360 * spins) + Math.random() * 360;
-    setRotation(finalRotation);
+    // Seleciona um índice aleatório
+    const winnerIndex = Math.floor(Math.random() * games.length);
 
-    setTimeout(() => {
-      const result = onSpin();
-      setSelectedGame(result);
+    const spins = 5; // número de voltas completas
+    const totalItems = games.length;
+    const initialOffset = getInitialOffset();
+    const finalOffset = initialOffset - (spins * totalItems * ITEM_HEIGHT + winnerIndex * ITEM_HEIGHT);
+
+    setSpinOffset(initialOffset);
+
+    // Executa a mudança de offset com requestAnimationFrame para garantir atualização ASAP
+    window.requestAnimationFrame(() => {
+      setSpinOffset(finalOffset);
+    });
+
+    spinTimeout.current = setTimeout(() => {
+      setSelectedGame(games[winnerIndex]);
       setIsSpinning(false);
       setShowResult(true);
     }, spinDuration * 1000);
-  };
+  }
 
-  const handleCloseResult = () => {
+  function handleCloseResult() {
     setShowResult(false);
-    
-    // Remove o jogo da lista se a opção estiver marcada
+
     if (removeAfterSpin && selectedGame) {
       onRemoveGame(selectedGame.id);
       setSelectedGame(null);
+
+      setSpinOffset(getInitialOffset());
     }
-  };
+  }
+
+  function resetSpin() {
+    setSpinOffset(getInitialOffset());
+    setSelectedGame(null);
+  }
+
+  const transitionStyle = isSpinning
+    ? `transform ${spinDuration}s cubic-bezier(0.22, 0.61, 0.36, 1)`
+    : `transform 0.6s cubic-bezier(0.45, 0, 0.55, 1)`;
+
+  // Repete o array de games 5 vezes para o efeito contínuo sem muitos elementos
+  const repeatedGames = Array(5).fill(games).flat();
 
   return (
     <>
-      {/* Modal de tela cheia durante o giro */}
       {isSpinning && (
         <div className="fixed inset-0 z-[60] bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center">
           <div className="w-full h-full flex flex-col items-center justify-center p-4 md:p-8">
-            {/* Título animado */}
             <h2 className="text-3xl md:text-6xl font-bold mb-8 md:mb-12 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-pulse">
               🎲 Girando a Roleta! 🎲
             </h2>
 
-            {/* Roleta grande */}
-            <div className="relative w-[85vmin] h-[85vmin] max-w-[550px] max-h-[550px] mb-4 md:mb-8">
-              {/* Indicador/Seta - FORA da roleta */}
-              <div className="absolute -top-6 md:-top-8 left-1/2 -translate-x-1/2 z-20">
-                <div className="flex flex-col items-center">
-                  <div className="w-0 h-0 border-l-[20px] md:border-l-[25px] border-l-transparent border-r-[20px] md:border-r-[25px] border-r-transparent border-t-[35px] md:border-t-[40px] border-t-red-500 drop-shadow-2xl" 
-                       style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
-                  <div className="w-1.5 md:w-2 h-3 md:h-4 bg-red-500 -mt-1" />
+            <div className="relative w-full max-w-2xl mb-8">
+              {/* Setas indicadoras laterais */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full z-20">
+                <div className="flex items-center gap-2">
+                  <div className="bg-red-600 text-white px-4 py-2 rounded-l-full font-bold text-sm md:text-base shadow-lg">
+                    VENCEDOR
+                  </div>
+                  <div 
+                    className="w-0 h-0"
+                    style={{
+                      borderTop: '25px solid transparent',
+                      borderBottom: '25px solid transparent',
+                      borderLeft: '40px solid #dc2626',
+                      filter: 'drop-shadow(4px 0 12px rgba(220, 38, 38, 0.6))',
+                    }}
+                  />
                 </div>
               </div>
 
-              {/* Disco da roleta */}
-              <div
-                className="absolute inset-0 rounded-full shadow-2xl"
-                style={{
-                  background: generateGradient(games.length),
-                  transform: `rotate(${rotation}deg)`,
-                  transition: `transform ${spinDuration}s cubic-bezier(0.17, 0.67, 0.12, 0.99)`,
-                }}
-              >
-                {/* Brilho interno */}
-                <div className="absolute inset-4 md:inset-8 rounded-full bg-gradient-to-br from-white/20 to-transparent pointer-events-none" />
-                
-                {/* Marcadores de divisão - linhas brancas PRIMEIRO */}
-                {games.length > 0 && games.map((_, i) => {
-                  const angle = (360 / games.length) * i;
-                  return (
-                    <div
-                      key={`line-${i}`}
-                      className="absolute top-1/2 left-1/2 w-0.5 bg-white/70 origin-bottom"
-                      style={{
-                        height: '50%',
-                        transform: `translate(-50%, -100%) rotate(${angle}deg)`,
-                      }}
-                    />
-                  );
-                })}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full z-20">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-0 h-0"
+                    style={{
+                      borderTop: '25px solid transparent',
+                      borderBottom: '25px solid transparent',
+                      borderRight: '40px solid #dc2626',
+                      filter: 'drop-shadow(-4px 0 12px rgba(220, 38, 38, 0.6))',
+                    }}
+                  />
+                  <div className="bg-red-600 text-white px-4 py-2 rounded-r-full font-bold text-sm md:text-base shadow-lg">
+                    VENCEDOR
+                  </div>
+                </div>
+              </div>
 
-                {/* Nomes dos jogos - posicionados ENTRE as linhas divisórias */}
-                {games.map((game, i) => {
-                  const segmentAngle = 360 / games.length;
-                  // Posiciona no meio da fatia (entre duas linhas)
-                  const middleAngle = (segmentAngle * i) + (segmentAngle / 2);
-                  
-                  // Calcula distância do centro baseado no tamanho da roleta
-                  const radiusPercent = games.length > 20 ? 38 : games.length > 15 ? 40 : 42;
-                  
-                  return (
-                    <div
-                      key={game.id}
-                      className="absolute top-1/2 left-1/2"
-                      style={{
-                        transform: `rotate(${middleAngle}deg)`,
-                        transformOrigin: '0 0',
-                      }}
-                    >
-                      <div 
-                        style={{
-                          transform: `translateX(${radiusPercent}%) rotate(90deg)`,
-                        }}
-                      >
-                        <div className="bg-white/95 backdrop-blur px-1.5 py-0.5 rounded shadow-md border border-gray-300">
-                          <p 
-                            className="font-bold text-gray-800 whitespace-nowrap text-center"
-                            style={{ 
-                              fontSize: games.length > 25 ? '6px' : games.length > 20 ? '7px' : games.length > 15 ? '8px' : games.length > 10 ? '9px' : '10px',
-                              maxWidth: games.length > 25 ? '70px' : games.length > 20 ? '80px' : games.length > 15 ? '90px' : '110px',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                            }}
-                            title={game.name}
-                          >
-                            {game.name}
-                          </p>
+              {/* Container com máscara */}
+              <div className="relative bg-white/80 backdrop-blur rounded-2xl shadow-2xl overflow-hidden border-4 border-purple-300">
+                {/* Linhas de destaque para o item central */}
+                <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 pointer-events-none z-10">
+                  <div className="border-t-4 border-b-4 border-red-500 h-20" style={{ boxShadow: 'inset 0 0 20px rgba(220, 38, 38, 0.3)' }} />
+                </div>
+
+                {/* Gradientes de fade superior e inferior */}
+                <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
+
+                {/* Lista de jogos rolando */}
+                <div className="h-[400px] md:h-[500px] overflow-hidden relative">
+                  <div
+                    className="absolute w-full"
+                    style={{
+                      transform: `translateY(calc(50% - 40px + ${spinOffset}px))`,
+                      transition: transitionStyle,
+                    }}
+                  >
+                    {repeatedGames.map((game, index) => {
+                      const colorIndex = index % games.length;
+                      const hue = (360 / games.length) * colorIndex;
+
+                      return (
+                        <div
+                          key={`${game.id}-${index}`}
+                          className="h-20 flex items-center justify-center px-6 border-b-2 border-white/50"
+                          style={{
+                            background: `linear-gradient(135deg, hsl(${hue}, 85%, 96%), hsl(${hue}, 85%, 88%))`,
+                          }}
+                        >
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <div 
+                              className="w-4 h-4 rounded-full flex-shrink-0 shadow-lg"
+                              style={{ background: `hsl(${hue}, 85%, 60%)` }}
+                            />
+                            <p className="text-xl md:text-2xl font-bold text-gray-800 truncate">
+                              {game.name}
+                            </p>
+                            <Play className="w-6 h-6 text-purple-600 ml-auto flex-shrink-0" />
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {/* Centro da roleta */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-white border-3 md:border-4 border-gray-900 shadow-2xl flex items-center justify-center z-10">
-                    <Shuffle className="w-8 h-8 md:w-12 md:h-12 text-purple-600 animate-spin" />
+                      );
+                    })}
                   </div>
                 </div>
               </div>
 
               {/* Efeito de brilho ao redor */}
-              <div className="absolute -inset-4 rounded-full animate-pulse pointer-events-none">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 blur-2xl" />
+              <div className="absolute -inset-2 rounded-2xl animate-pulse pointer-events-none -z-10">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/30 via-pink-500/30 to-blue-500/30 blur-xl" />
               </div>
             </div>
 
@@ -188,11 +196,9 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
         </div>
       )}
 
-      {/* Popup de Resultado */}
       {showResult && selectedGame && (
         <div className="fixed inset-0 z-[70] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 relative animate-scale-in">
-            {/* Botão de fechar */}
             <button
               onClick={handleCloseResult}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
@@ -200,7 +206,6 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
               <X size={24} />
             </button>
 
-            {/* Conteúdo do popup */}
             <div className="text-center">
               <div className="mb-6">
                 <Sparkles className="w-12 h-12 md:w-16 md:h-16 text-yellow-500 mx-auto mb-4 animate-bounce" />
@@ -237,7 +242,6 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
         </div>
       )}
 
-      {/* Botão flutuante para abrir sidebar no mobile */}
       <button
         onClick={() => setMobileOpen(true)}
         className="lg:hidden fixed bottom-4 right-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all z-40"
@@ -250,7 +254,6 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
         )}
       </button>
 
-      {/* Overlay mobile */}
       {mobileOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
@@ -258,7 +261,6 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
         />
       )}
 
-      {/* Sidebar */}
       <div
         className={`
           fixed top-0 right-0 h-full bg-white shadow-2xl border-l border-gray-200 transition-all duration-300 flex flex-col z-50
@@ -266,7 +268,6 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
           ${mobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
         `}
       >
-        {/* Botão de fechar no mobile */}
         <button
           onClick={() => setMobileOpen(false)}
           className="lg:hidden absolute right-4 top-4 text-gray-500 hover:text-gray-700"
@@ -274,7 +275,6 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
           <X size={24} />
         </button>
 
-        {/* Botão de collapse (apenas desktop) */}
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="hidden lg:block absolute left-[6px] top-[22px] bg-none opacity-60 hover:opacity-100 transition-opacity"
@@ -287,14 +287,12 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
 
         {!collapsed && (
           <>
-            {/* Header */}
             <div className="flex justify-center items-center p-4 border-b border-gray-200">
               <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                🎮 Roleta de Jogos
+                🎰 Roleta de Jogos
               </h2>
             </div>
 
-            {/* Conteúdo */}
             <div className="flex-1 overflow-y-auto p-4">
               {games.length === 0 ? (
                 <div className="text-center py-8">
@@ -305,43 +303,8 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
                 </div>
               ) : (
                 <>
-                  {/* Roleta Visual - Preview */}
                   <div className="text-center mb-6">
-                    <div className="relative mb-6 flex justify-center items-center">
-                      <div className="relative w-56 h-56">
-                        {/* Disco da roleta */}
-                        <div
-                          className="absolute inset-0 rounded-full shadow-xl"
-                          style={{
-                            background: generateGradient(games.length),
-                          }}
-                        >
-                          <div className="absolute inset-4 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
-                          
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-16 h-16 rounded-full bg-white border-4 border-gray-800 shadow-lg flex items-center justify-center">
-                              <Shuffle className="w-8 h-8 text-purple-600" />
-                            </div>
-                          </div>
-
-                          {games.length > 0 && games.map((_, i) => (
-                            <div
-                              key={i}
-                              className="absolute top-1/2 left-1/2 w-0.5 h-28 bg-white/40 origin-bottom"
-                              style={{
-                                transform: `translate(-50%, -100%) rotate(${(360 / games.length) * i}deg)`,
-                              }}
-                            />
-                          ))}
-                        </div>
-
-                        <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-10">
-                          <div className="w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[25px] border-t-red-500 drop-shadow-lg" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Configurações da Roleta */}
+                    {/* Configurações */}
                     <div className="bg-gray-50 rounded-lg p-4 mb-4 space-y-3 border border-gray-200">
                       <div>
                         <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
@@ -350,10 +313,10 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
                         </label>
                         <input
                           type="number"
-                          min="1"
+                          min="3"
                           max="10"
                           value={spinDuration}
-                          onChange={(e) => setSpinDuration(Math.max(1, Math.min(10, parseInt(e.target.value) || 3)))}
+                          onChange={(e) => setSpinDuration(Math.max(3, Math.min(10, parseInt(e.target.value) || 5)))}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
                       </div>
@@ -400,8 +363,17 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
                       className="w-full inline-flex justify-center items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-base font-bold rounded-lg hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                     >
                       <Shuffle className="w-5 h-5" />
-                      {isSpinning ? 'Girando...' : '🎲 GIRAR ROLETA'}
+                      {isSpinning ? 'Girando...' : '🎰 GIRAR ROLETA'}
                     </button>
+
+                    {selectedGame && !isSpinning && (
+                      <button
+                        onClick={resetSpin}
+                        className="w-full mt-2 px-4 py-2 text-sm text-purple-600 hover:text-purple-700 font-medium"
+                      >
+                        Resetar Roleta
+                      </button>
+                    )}
                   </div>
 
                   {/* Lista de Jogos */}
@@ -410,7 +382,7 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
                     Jogos na Roleta ({games.length})
                   </h3>
                   <div className="space-y-2 max-h-[35vh] overflow-y-auto pr-2 custom-scrollbar">
-                    {games.map((game: RouletteGame, index: number) => (
+                    {games.map((game, index) => (
                       <div
                         key={game.id}
                         className="flex justify-between items-center p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200 hover:border-purple-400 transition-all gap-2 group"
