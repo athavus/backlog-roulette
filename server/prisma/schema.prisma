@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  provider      String    // google, github, etc.
+  providerId    String
+  profilePublic Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  games         UserGame[]
+  reviews       Review[]
+  
+  @@unique([provider, providerId])
+}
+
+model UserGame {
+  id          String     @id @default(cuid())
+  userId      String
+  rawgGameId  Int        // ID from RAWG API
+  gameName    String
+  gameImage   String?
+  status      GameStatus @default(BACKLOG)
+  inRoulette  Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review      Review?
+  
+  @@unique([userId, rawgGameId])
+  @@index([userId])
+  @@index([status])
+}
+
+enum GameStatus {
+  BACKLOG
+  IN_PROGRESS
+  COMPLETED
+  DROPPED
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  userGameId  String   @unique
+  rating      Int      // 1-10
+  content     String?  @db.Text
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  userGame    UserGame @relation(fields: [userGameId], references: [id], onDelete: Cascade)
+  userId      String   // Denormalized for easier queries
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([isPublic])
+}

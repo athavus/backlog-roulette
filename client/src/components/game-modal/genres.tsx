@@ -1,6 +1,11 @@
-import type { GameGenresProps } from '../../types/game-modal';
+// GameGenres component
 
-export function GameGenres({ genres }: GameGenresProps) {
+interface GenreItem {
+  name: string;
+  id?: number;
+}
+
+export function GameGenres({ genres }: { genres: GenreItem[] }) {
   if (!genres || genres.length === 0) {
     return null;
   }
