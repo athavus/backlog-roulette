@@ -14,7 +14,7 @@ export function SearchInput({
   return (
     <div className="relative">
       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-        <Search className="w-5 h-5 text-text-muted" />
+        <Search className="w-5 h-5 text-muted-foreground" />
       </div>
       <input
         type="text"
@@ -32,16 +32,16 @@ export function SearchInput({
           sm:py-4
           text-sm 
           sm:text-base
-          bg-bg-secondary
+          bg-background
           border 
-          border-border
-          rounded-2xl
-          text-text-primary
-          placeholder:text-text-muted
+          border-input
+          rounded-sm
+          text-foreground
+          placeholder:text-muted-foreground
           outline-none 
-          focus:ring-2 
-          focus:ring-accent/50
-          focus:border-accent
+          focus-visible:ring-2 
+          focus-visible:ring-ring
+          focus-visible:ring-offset-2
           transition-all
           shadow-sm
           hover:shadow-md

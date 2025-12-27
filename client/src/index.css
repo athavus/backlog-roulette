@@ -1,4 +1,143 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.25rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 94.1%;
+  }
+}
+
+/* ===== CUSTOMIZABLE ACCENT COLORS ===== */
+:root {
+  --accent-hue: 221.2;
+  --accent-saturation: 83.2%;
+  --accent-lightness: 53.3%;
+  --accent-hue-dark: 217.2;
+  --accent-saturation-dark: 91.2%;
+  --accent-lightness-dark: 59.8%;
+}
+
+[data-accent="blue"] {
+  --accent-hue: 221.2;
+  --accent-saturation: 83.2%;
+  --accent-lightness: 53.3%;
+  --accent-hue-dark: 217.2;
+  --accent-saturation-dark: 91.2%;
+  --accent-lightness-dark: 59.8%;
+}
+
+[data-accent="red"] {
+  --accent-hue: 0;
+  --accent-saturation: 84.2%;
+  --accent-lightness: 60.2%;
+  --accent-hue-dark: 0;
+  --accent-saturation-dark: 72.8%;
+  --accent-lightness-dark: 65.6%;
+}
+
+[data-accent="green"] {
+  --accent-hue: 142.1;
+  --accent-saturation: 76.2%;
+  --accent-lightness: 36.3%;
+  --accent-hue-dark: 142.1;
+  --accent-saturation-dark: 70.6%;
+  --accent-lightness-dark: 45.3%;
+}
+
+[data-accent="purple"] {
+  --accent-hue: 262.1;
+  --accent-saturation: 83.3%;
+  --accent-lightness: 57.8%;
+  --accent-hue-dark: 263.4;
+  --accent-saturation-dark: 70%;
+  --accent-lightness-dark: 50.4%;
+}
+
+[data-accent="orange"] {
+  --accent-hue: 25.7;
+  --accent-saturation: 100%;
+  --accent-lightness: 51%;
+  --accent-hue-dark: 24.6;
+  --accent-saturation-dark: 95%;
+  --accent-lightness-dark: 53.1%;
+}
+
+[data-accent="pink"] {
+  --accent-hue: 322.2;
+  --accent-saturation: 84%;
+  --accent-lightness: 60.4%;
+  --accent-hue-dark: 322.2;
+  --accent-saturation-dark: 74.4%;
+  --accent-lightness-dark: 65.7%;
+}
+
+/* Apply accent color to primary and ring */
+:root, [data-theme="light"] {
+  --primary: hsl(var(--accent-hue) var(--accent-saturation) var(--accent-lightness));
+  --ring: hsl(var(--accent-hue) var(--accent-saturation) var(--accent-lightness));
+}
+
+.dark, [data-theme="dark"] {
+  --primary: hsl(var(--accent-hue-dark) var(--accent-saturation-dark) var(--accent-lightness-dark));
+  --ring: hsl(var(--accent-hue-dark) var(--accent-saturation-dark) var(--accent-lightness-dark));
+}
+
+@layer base {
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+}
+
+/* ===== LEGACY SUPPORT ===== */
+.border-border { border-color: hsl(var(--border)); }
+.bg-bg-primary { background-color: hsl(var(--background)); }
+.bg-bg-secondary { background-color: hsl(var(--card)); }
+.bg-bg-tertiary { background-color: hsl(var(--muted)); }
+.text-text-primary { color: hsl(var(--foreground)); }
+.text-text-secondary { color: hsl(var(--muted-foreground)); }
+.text-text-muted { color: hsl(var(--muted-foreground)); }
 
 /* ===== DESIGN TOKENS ===== */
 :root {
@@ -74,7 +213,6 @@
 }
 
 /* ===== FONTS ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;

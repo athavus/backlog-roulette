@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { X, Calendar, Star, Gamepad2 } from 'lucide-react';
-import { GameImage } from './image';
 import { GamePlatforms } from './platforms';
 import { GameGenres } from './genres';
 import { GameStatusButton, type GameStatus } from './GameStatusButton';
@@ -31,17 +30,18 @@ export function GameModal({
     }
   };
 
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
 
   const handleStatusChange = (status: GameStatus) => {
     setGameStatus(status);
     // If adding to backlog, also add to roulette
     if (status === 'BACKLOG' && !isInRoulette) {
       handleToggleRoulette();
+    }
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
     }
   };
 
@@ -53,10 +53,17 @@ export function GameModal({
       <div className="bg-bg-secondary rounded-2xl w-full max-w-sm sm:max-w-2xl lg:max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden shadow-2xl my-auto border border-border animate-slide-up">
         {/* Header with gradient */}
         <div className="relative h-48 sm:h-64 overflow-hidden">
-          <GameImage
-            backgroundImage={game.background_image}
-            gameName={game.name}
-          />
+          {game.background_image ? (
+            <img
+              src={game.background_image}
+              alt={game.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-bg-tertiary flex items-center justify-center">
+              <Gamepad2 className="w-16 h-16 text-text-muted" />
+            </div>
+          )}
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary via-transparent to-transparent" />
 

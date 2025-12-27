@@ -13,17 +13,14 @@ export function SuggestionsList({ games, onSelectGame, visible }: SuggestionsLis
         top-full 
         left-0 
         right-0 
-        mt-2 sm:mt-3 
-        bg-bg-secondary
+        mt-2 
+        bg-card
         border
-        border-border
-        backdrop-blur-md 
-        rounded-xl sm:rounded-2xl 
-        shadow-xl 
+        rounded-sm 
+        shadow-lg 
         max-h-[60vh] sm:max-h-96 
         overflow-y-auto 
         z-50
-        animate-slide-down
       "
       role="listbox"
       aria-label="Sugestões de jogos"

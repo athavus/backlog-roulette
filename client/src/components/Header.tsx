@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { LogIn } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeToggle } from './ui/ThemeToggle';
+import { ColorPicker } from './ui/color-picker';
 import { UserMenu } from './auth/UserMenu';
 import { LoginModal } from './auth/LoginModal';
 
@@ -31,6 +32,7 @@ export function Header() {
 
                         {/* Right side */}
                         <div className="flex items-center gap-3">
+                            <ColorPicker />
                             <ThemeToggle />
 
                             {loading ? (
