@@ -23,10 +23,10 @@ router.post('/register', async (req: Request, res: Response) => {
     }
 
     // Verificar se o usuário já existe
-    const existingUser = await prisma.user.findUnique({ 
-      where: { email: email.toLowerCase() } 
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() }
     });
-    
+
     if (existingUser) {
       return res.status(400).json({ error: 'Email já cadastrado' });
     }
@@ -107,12 +107,12 @@ router.get('/google', passport.authenticate('google', {
 }));
 
 router.get('/google/callback',
-  passport.authenticate('google', { 
-    failureRedirect: process.env.CLIENT_URL || 'http://localhost:5173/login?error=google' 
+  passport.authenticate('google', {
+    failureRedirect: process.env.CLIENT_URL || 'http://localhost:5173/login?error=google'
   }),
   (req: Request, res: Response) => {
     // Redirecionar para o frontend com sucesso
-    res.redirect(`${process.env.CLIENT_URL || 'http://localhost:5173'}/auth/callback?success=true`);
+    res.redirect(`${process.env.CLIENT_URL || 'http://localhost:5173'}/?success=true`);
   }
 );
 

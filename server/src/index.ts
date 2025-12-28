@@ -32,6 +32,9 @@ import searchRoutes from "./routes/search.js";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Necessário para o Passport/Express identificar o protocolo correto (https) atrás do proxy do Render
+app.set("trust proxy", 1);
+
 // Middlewares
 app.use(
   cors({
@@ -142,4 +145,4 @@ app.use((req: Request, res: Response) => {
   });
 });
 
-app.listen(PORT, () => {});
+app.listen(PORT, () => { });
