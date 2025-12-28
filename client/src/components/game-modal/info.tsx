@@ -11,7 +11,7 @@ export function GameInfo({ released, metacritic }: GameInfoProps) {
             <Calendar size={20} />
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-widest">Released</span>
+            <span className="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-widest">Lançamento</span>
             <span className="text-sm font-bold text-gray-700">{formatDate(released)}</span>
           </div>
         </div>

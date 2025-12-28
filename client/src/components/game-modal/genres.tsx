@@ -16,7 +16,7 @@ export function GameGenres({ genres }: GameGenresProps) {
         tracking-[0.3em]
         mb-4
       ">
-        Genres
+        Gêneros
       </h3>
       <div className="flex flex-wrap gap-2">
         {genres.map((genre) => (

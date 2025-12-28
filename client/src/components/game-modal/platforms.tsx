@@ -1,4 +1,3 @@
-import { Globe } from 'lucide-react';
 import type { GamePlatformsProps } from '../../types/game-modal';
 
 export function GamePlatforms({ platforms }: GamePlatformsProps) {
@@ -20,8 +19,7 @@ export function GamePlatforms({ platforms }: GamePlatformsProps) {
         items-center 
         gap-2
       ">
-        <Globe size={14} />
-        Platforms
+        Plataformas
       </h3>
       <div className="flex flex-wrap gap-2">
         {platforms.map((platform) => (

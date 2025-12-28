@@ -20,7 +20,7 @@ export function GameModalHeader({ gameName, onClose }: GameModalHeaderProps) {
     ">
       <div className="flex flex-col min-w-0">
         <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-[0.3em] mb-1">
-          System // Game Details
+          Detalhes
         </span>
         <h2 className="
           text-xl sm:text-2xl lg:text-3xl 
