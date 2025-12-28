@@ -15,10 +15,8 @@ export function BacklogTitle() {
           inline-block
           
           /* Escalonamento fino para evitar distorção de caracteres */
-          text-[4px]
-          [font-size:clamp(4px,1.25vw,12px)]
-          sm:[font-size:clamp(8px,1.1vw,14px)]
-          md:[font-size:min(1vw,14px)]
+          sm:text-[10px]
+          md:text-[11px]
           lg:text-[13px]
           xl:text-[15px]
           
