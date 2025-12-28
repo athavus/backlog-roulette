@@ -17,12 +17,12 @@ router.get('/roulette', isAuthenticated, async (req: Request, res: Response) => 
     if (!req.user) {
       return res.status(401).json({ error: 'Usuário não encontrado' });
     }
-    
+
     const games = await prisma.rouletteGame.findMany({
       where: { userId: req.user.id },
       orderBy: { addedAt: 'desc' }
     });
-    
+
     res.json(games.map(game => ({
       id: game.gameId,
       name: game.name
@@ -123,23 +123,25 @@ router.post('/roulette/sync', isAuthenticated, async (req: Request, res: Respons
       return res.status(401).json({ error: 'Usuário não encontrado' });
     }
 
+    const userId = req.user.id;
+
     if (!Array.isArray(games)) {
       return res.status(400).json({ error: 'Lista de jogos inválida' });
     }
 
     // Obter jogos existentes no banco
     const existingGames = await prisma.rouletteGame.findMany({
-      where: { userId: req.user.id }
+      where: { userId }
     });
     const existingGameIds = new Set(existingGames.map(g => g.gameId));
 
     // Adicionar apenas jogos que não existem no banco
     const gamesToAdd = games.filter((game: { id: number; name: string }) => !existingGameIds.has(game.id));
-    
+
     if (gamesToAdd.length > 0) {
       await prisma.rouletteGame.createMany({
         data: gamesToAdd.map((game: { id: number; name: string }) => ({
-          userId: req.user.id,
+          userId,
           gameId: game.id,
           name: game.name
         })),

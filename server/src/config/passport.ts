@@ -14,7 +14,7 @@ passport.use(new LocalStrategy(
   async (email: string, password: string, done: (error: any, user?: User | false, info?: { message: string }) => void) => {
     try {
       const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
-      
+
       if (!user) {
         return done(null, false, { message: 'Email ou senha incorretos' });
       }
@@ -24,7 +24,7 @@ passport.use(new LocalStrategy(
       }
 
       const isMatch = await comparePassword(password, user.password);
-      
+
       if (!isMatch) {
         return done(null, false, { message: 'Email ou senha incorretos' });
       }
@@ -40,11 +40,11 @@ passport.use(new LocalStrategy(
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   passport.use(new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientID: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       callbackURL: '/api/auth/google/callback'
     },
-    async (accessToken: string, refreshToken: string, profile: any, done: (error: any, user?: User | null) => void) => {
+    async (accessToken: string, refreshToken: string, profile: any, done: any) => {
       try {
         // Verificar se o usuário já existe
         let user = await prisma.user.findUnique({ where: { googleId: profile.id } });
