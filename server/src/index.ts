@@ -141,3 +141,5 @@ app.use((req: Request, res: Response) => {
     ],
   });
 });
+
+app.listen(PORT, () => {});
