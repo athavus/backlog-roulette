@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?
+  googleId  String?  @unique
+  name      String
+  avatar    String?
+  createdAt DateTime @default(now())
+  
+  rouletteGames RouletteGame[]
+
+  @@index([email])
+  @@index([googleId])
+}
+
+model RouletteGame {
+  id        String   @id @default(cuid())
+  userId    String
+  gameId    Int
+  name      String
+  addedAt   DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
+  @@index([userId])
+}
+
