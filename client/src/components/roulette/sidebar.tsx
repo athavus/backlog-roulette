@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { Shuffle, Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import type { RouletteGame, RouletteSidebarProps } from '../../types/roulette';
+import { useState } from "react";
+import { Shuffle, ChevronLeft, ChevronRight, X } from "lucide-react";
+import type { RouletteGame, RouletteSidebarProps } from "../../types/roulette";
 
 export function RouletteSidebar({
   games,
   onSpin,
   onRemoveGame,
   collapsed,
-  onToggleCollapse
+  onToggleCollapse,
 }: RouletteSidebarProps) {
   const [selectedGame, setSelectedGame] = useState<RouletteGame | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -31,11 +31,11 @@ export function RouletteSidebar({
       {/* Botão flutuante para abrir sidebar no mobile */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors z-40"
+        className="lg:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:bg-blue-700 transition-all active:scale-95 z-40"
       >
         <Shuffle className="w-6 h-6" />
         {games.length > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold">
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-6 h-6 rounded-md flex items-center justify-center font-bold border-2 border-white shadow-md">
             {games.length}
           </span>
         )}
@@ -44,7 +44,7 @@ export function RouletteSidebar({
       {/* Overlay mobile */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -52,15 +52,15 @@ export function RouletteSidebar({
       {/* Sidebar */}
       <div
         className={`
-          fixed top-0 right-0 h-full bg-white shadow-lg border-l border-gray-200 transition-all duration-300 flex flex-col z-50
-          ${collapsed ? 'w-12' : 'w-80 sm:w-96'}
-          ${mobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+          fixed top-0 right-0 h-full bg-[#fdfdfd] shadow-2xl border-l border-blue-100 transition-all duration-300 flex flex-col z-50
+          ${collapsed ? "w-14" : "w-80 sm:w-96"}
+          ${mobileOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"}
         `}
       >
         {/* Botão de fechar no mobile */}
         <button
           onClick={() => setMobileOpen(false)}
-          className="lg:hidden absolute right-4 top-4 text-gray-500 hover:text-gray-700"
+          className="lg:hidden absolute right-4 top-4 text-gray-400 hover:text-gray-600 p-2"
         >
           <X size={24} />
         </button>
@@ -68,90 +68,93 @@ export function RouletteSidebar({
         {/* Botão de collapse (apenas desktop) */}
         <button
           onClick={onToggleCollapse}
-          className="hidden lg:block absolute left-[6px] top-[22px] bg-none opacity-60 hover:opacity-100 transition-opacity"
+          className="hidden lg:flex absolute left-[-16px] top-1/2 -translate-y-1/2 w-8 h-12 bg-white border border-blue-100 rounded-l-lg shadow-md items-center justify-center text-blue-400 hover:text-blue-600 transition-colors z-10"
         >
-          {collapsed
-            ? <div className="flex -space-x-1"><ChevronLeft size={16} /><ChevronLeft size={16} /></div>
-            : <div className="flex -space-x-1"><ChevronRight size={16} /><ChevronRight size={16} /></div>
-          }
+          {collapsed ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
         </button>
 
         {!collapsed && (
           <>
             {/* Header */}
-            <div className="flex justify-center items-center p-4 border-b">
-              <h2 className="text-xl font-bold text-gray-900">Roleta</h2>
+            <div className="pt-8 pb-4 px-6">
+              <h2 className="text-xl font-mono font-bold text-blue-900 tracking-tighter uppercase border-b-2 border-blue-600 pb-2 inline-block">
+                ROULETTE
+              </h2>
             </div>
 
             {/* Conteúdo */}
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col">
               {games.length === 0 ? (
-                <div className="text-center py-8">
-                  <Shuffle className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-                  <p className="text-gray-500 text-sm">
-                    Nenhum jogo adicionado ainda.
+                <div className="flex-1 flex flex-col items-center justify-center text-center opacity-40">
+                  <div className="w-16 h-16 border-2 border-dashed border-gray-400 rounded-2xl flex items-center justify-center mb-4">
+                    <Shuffle className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <p className="font-mono text-sm uppercase tracking-widest text-gray-500">
+                    Empty Backlog
                   </p>
                 </div>
               ) : (
                 <>
-                  {/* Spin */}
-                  <div className="text-center mb-6">
-                    <div className="bg-gray-50 rounded-lg p-4 mb-3">
-                      {isSpinning ? (
-                        <div className="flex flex-col items-center">
-                          <Shuffle className="w-10 h-10 text-blue-500 animate-spin mb-2" />
-                          <p className="text-sm text-gray-700">
-                            Girando a roleta...
-                          </p>
-                        </div>
-                      ) : selectedGame ? (
-                        <div className="flex flex-col items-center">
-                          <Play className="w-10 h-10 text-green-500 mb-2" />
-                          <h3 className="text-lg font-bold text-gray-900 mb-1">
-                            Jogo Selecionado
-                          </h3>
-                          <p className="text-blue-600 font-medium break-words max-w-full px-2">
-                            {selectedGame.name}
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col items-center">
-                          <Shuffle className="w-10 h-10 text-gray-400 mb-2" />
-                          <p className="text-sm text-gray-600">
-                            Pronto para girar!
-                          </p>
-                        </div>
-                      )}
+                  {/* Spin Section */}
+                  <div className="mb-8">
+                    <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 mb-4 relative overflow-hidden group">
+                      <div className="relative z-10">
+                        {isSpinning ? (
+                          <div className="flex flex-col items-center py-4">
+                            <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
+                            <p className="font-mono text-xs uppercase tracking-tighter text-blue-600 font-bold">
+                              Escolhendo seu Destino...
+                            </p>
+                          </div>
+                        ) : selectedGame ? (
+                          <div className="flex flex-col items-center py-2 animate-in fade-in zoom-in duration-300">
+                            <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider mb-3">
+                              Vencedor!
+                            </span>
+                            <h3 className="text-xl font-bold text-gray-900 text-center leading-tight mb-1">
+                              {selectedGame.name}
+                            </h3>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center py-4 opacity-60">
+                            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-blue-400">
+                              Roleta Pronta!
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     <button
                       onClick={handleSpin}
                       disabled={isSpinning || games.length === 0}
-                      className="w-full inline-flex justify-center items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="w-full flex justify-center items-center gap-2 px-6 py-4 bg-blue-600 text-white font-mono text-sm font-bold rounded-xl hover:bg-blue-700 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[0_4px_0_rgb(29,78,216)] active:shadow-none active:translate-y-[4px]"
                     >
-                      <Shuffle className="w-4 h-4" />
-                      {isSpinning ? 'Girando...' : 'Girar'}
+                      {isSpinning ? "GIRANDO..." : "GIRE A ROLETA!"}
                     </button>
                   </div>
 
                   {/* Lista de Jogos */}
-                  <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                    Jogos na Roleta ({games.length})
-                  </h3>
-                  <div className="space-y-2 max-h-[66vh] lg:h-[75%] overflow-y-auto">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 font-bold">
+                      Backlog Atual: ({games.length})
+                    </h3>
+                  </div>
+
+                  <div className="space-y-2 flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-blue-100">
                     {games.map((game: RouletteGame) => (
                       <div
                         key={game.id}
-                        className="flex justify-between items-center p-2 bg-gray-50 rounded gap-2"
+                        className="group flex justify-between items-center p-3 bg-white border border-gray-100 hover:border-blue-200 rounded-xl transition-all hover:shadow-sm"
                       >
-                        <span className="text-sm font-medium text-gray-900 break-words flex-1">
+                        <span className="text-sm font-medium text-gray-700 truncate flex-1">
                           {game.name}
                         </span>
                         <button
                           onClick={() => onRemoveGame(game.id)}
-                          className="text-xs text-red-600 hover:text-red-800 font-medium whitespace-nowrap"
+                          className="opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-red-500 transition-all rounded-md hover:bg-red-50"
                         >
-                          Remover
+                          <X size={14} />
                         </button>
                       </div>
                     ))}

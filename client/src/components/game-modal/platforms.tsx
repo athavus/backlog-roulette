@@ -7,31 +7,36 @@ export function GamePlatforms({ platforms }: GamePlatformsProps) {
   }
 
   return (
-    <div>
+    <div className="bg-white border-2 border-blue-50 p-6 rounded-2xl">
       <h3 className="
-        font-semibold 
-        text-gray-900 
-        mb-2 
+        font-mono 
+        font-bold
+        text-gray-400 
+        text-[10px]
+        uppercase
+        tracking-[0.3em]
+        mb-4 
         flex 
         items-center 
         gap-2
-        text-sm sm:text-base
       ">
-        <Globe className="text-gray-500 flex-shrink-0" size={18} />
-        Plataformas
+        <Globe size={14} />
+        Platforms
       </h3>
-      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+      <div className="flex flex-wrap gap-2">
         {platforms.map((platform) => (
           <span
             key={platform.platform.id}
             className="
-              px-2.5 py-1 
-              sm:px-3 sm:py-1 
-              bg-gray-100 
-              text-gray-700 
-              rounded-full 
-              text-xs sm:text-sm
+              px-3 py-1 
+              bg-white
+              border border-gray-100
+              text-gray-600 
+              rounded-lg
+              text-xs
+              font-bold
               whitespace-nowrap
+              hover:border-blue-200 hover:text-blue-500 transition-colors
             "
           >
             {platform.platform.name}

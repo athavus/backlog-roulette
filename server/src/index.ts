@@ -7,19 +7,19 @@ import dotenv from 'dotenv';
 // Carregar variáveis de ambiente primeiro
 dotenv.config();
 
-console.log('🚀 Iniciando servidor...');
-console.log('📝 Variáveis de ambiente:', {
-  PORT: process.env.PORT || '3001 (padrão)',
-  DATABASE_URL: process.env.DATABASE_URL ? '✅ Configurado' : '❌ NÃO CONFIGURADO',
-  SESSION_SECRET: process.env.SESSION_SECRET ? '✅ Configurado' : '❌ NÃO CONFIGURADO',
-  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? '✅ Configurado' : '⚠️ Opcional',
-  RAWG_API_KEY: process.env.RAWG_API_KEY ? '✅ Configurado' : '❌ NÃO CONFIGURADO',
-  CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:5173 (padrão)'
+console.log('Iniciando servidor...');
+console.log('Variaveis de ambiente:', {
+  PORT: process.env.PORT || '3001 (padrao)',
+  DATABASE_URL: process.env.DATABASE_URL ? 'Configurado' : 'NAO CONFIGURADO',
+  SESSION_SECRET: process.env.SESSION_SECRET ? 'Configurado' : 'NAO CONFIGURADO',
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'Configurado' : 'Opcional',
+  RAWG_API_KEY: process.env.RAWG_API_KEY ? 'Configurado' : 'NAO CONFIGURADO',
+  CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:5173 (padrao)'
 });
 
-// Importar Prisma (vai dar erro se não foi gerado)
+// Importar Prisma (vai dar erro se nao foi gerado)
 import './lib/prisma.js';
-console.log('✅ Prisma Client carregado');
+console.log('Prisma Client carregado');
 
 // Importar rotas e passport
 import passport from './config/passport.js';
@@ -39,13 +39,13 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware de debug para todas as requisições
+// Middleware de debug para todas as requisicoes
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(`📥 ${req.method} ${req.path}`);
+  console.log(`[IN] ${req.method} ${req.path}`);
   next();
 });
 
-// Configuração de sessão com PostgreSQL
+// Configuracao de sessao com PostgreSQL
 try {
   const PgSession = connectPgSimple(session);
   app.use(session({
@@ -63,27 +63,27 @@ try {
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 dias
     }
   }));
-  console.log('✅ Sessão configurada com PostgreSQL');
+  console.log('Sessao configurada com PostgreSQL');
 } catch (error: any) {
-  console.error('❌ Erro ao configurar sessão:', error.message);
-  console.error('💡 Verifique se o DATABASE_URL está correto');
+  console.error('Erro ao configurar sessao:', error.message);
+  console.error('Verifique se o DATABASE_URL esta correto');
   throw error;
 }
 
 // Inicializar Passport
 app.use(passport.initialize());
 app.use(passport.session());
-console.log('✅ Passport inicializado');
+console.log('Passport inicializado');
 
 // Rotas
 app.use('/api/auth', authRoutes);
 app.use('/api/games', gamesRoutes);
 app.use('/api/search', searchRoutes);
-console.log('✅ Rotas registradas');
+console.log('Rotas registradas');
 
 // Rota de health check
 app.get('/api/health', (req: Request, res: Response) => {
-  res.json({ 
+  res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
     routes: {
@@ -96,7 +96,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 
 // Rota de teste
 app.get('/', (req: Request, res: Response) => {
-  res.json({ 
+  res.json({
     message: 'Backlog Roulette API',
     version: '1.0.0',
     endpoints: {
@@ -110,18 +110,18 @@ app.get('/', (req: Request, res: Response) => {
 
 // Tratamento de erros
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error('❌ Erro no servidor:', err);
-  res.status(500).json({ 
+  console.error('Erro no servidor:', err);
+  res.status(500).json({
     error: 'Erro interno do servidor',
     message: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
 });
 
-// Tratamento de rotas não encontradas
+// Tratamento de rotas nao encontradas
 app.use((req: Request, res: Response) => {
-  console.log(`⚠️ Rota não encontrada: ${req.method} ${req.path}`);
-  res.status(404).json({ 
-    error: 'Rota não encontrada',
+  console.log(`Rota nao encontrada: ${req.method} ${req.path}`);
+  res.status(404).json({
+    error: 'Rota nao encontrada',
     path: req.path,
     method: req.method,
     availableRoutes: [
@@ -138,13 +138,13 @@ app.use((req: Request, res: Response) => {
 
 app.listen(PORT, () => {
   console.log('');
-  console.log('═══════════════════════════════════════════════════');
-  console.log(`✅ Servidor rodando na porta ${PORT}`);
-  console.log('═══════════════════════════════════════════════════');
-  console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
-  console.log(`🔐 Auth: http://localhost:${PORT}/api/auth/*`);
-  console.log(`🎮 Games: http://localhost:${PORT}/api/games/*`);
-  console.log(`🔍 Search: http://localhost:${PORT}/api/search/*`);
-  console.log('═══════════════════════════════════════════════════');
+  console.log('===================================================');
+  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log('===================================================');
+  console.log(`Health check: http://localhost:${PORT}/api/health`);
+  console.log(`Auth: http://localhost:${PORT}/api/auth/*`);
+  console.log(`Games: http://localhost:${PORT}/api/games/*`);
+  console.log(`Search: http://localhost:${PORT}/api/search/*`);
+  console.log('===================================================');
   console.log('');
 });

@@ -8,29 +8,33 @@ interface BacklogButtonProps {
 
 export function BacklogButton({ icon, text, onClick }: BacklogButtonProps) {
   return (
-    <button 
+    <button
       onClick={onClick}
       className="
         inline-flex 
         items-center 
         justify-center
-        gap-2 
-        rounded-xl sm:rounded-2xl 
-        px-3 py-2 
-        sm:px-4 sm:py-2 
-        bg-white 
-        text-gray-900 
-        shadow-sm 
-        border border-gray-200 
-        hover:bg-gray-50 
-        active:bg-gray-100
-        transition-colors
-        text-sm sm:text-base
+        gap-3 
+        rounded-xl
+        px-6 py-4
+        bg-blue-600
+        text-white
+        font-mono
+        font-bold
+        text-sm
+        uppercase
+        tracking-widest
+        shadow-[0_4px_0_rgb(29,78,216)]
+        hover:bg-blue-700
+        hover:shadow-[0_4px_0_rgb(30,64,175)]
+        active:shadow-none
+        active:translate-y-[4px]
+        transition-all
         w-full sm:w-auto
       "
     >
       {icon}
-      <span className="font-medium">{text}</span>
+      <span>{text}</span>
     </button>
   );
 }
