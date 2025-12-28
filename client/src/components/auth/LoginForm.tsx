@@ -28,7 +28,7 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white rounded-lg shadow-lg p-8">
+      <div className="p-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           Entrar
         </h2>
@@ -85,7 +85,7 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">ou</span>
+              <span className="px-4 bg-[#ffffff] text-gray-500 rounded-full">ou</span>
             </div>
           </div>
 

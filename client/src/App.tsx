@@ -13,6 +13,7 @@ function App() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const { user, loading: authLoading, refreshUser } = useAuth();
   const {
     games: rouletteGames,
@@ -78,7 +79,7 @@ function App() {
       </div>
 
       {/* Área principal centralizada */}
-      <div className="flex-1 flex flex-col items-center justify-center lg:pr-80 px-2 sm:px-4">
+      <div className={`flex-1 flex flex-col items-center justify-center transition-all duration-300 px-2 sm:px-4 ${isSidebarCollapsed ? 'lg:pr-12' : 'lg:pr-80'}`}>
         <BacklogTitle />
 
         {/* Input de busca */}
@@ -111,6 +112,8 @@ function App() {
         games={rouletteGames}
         onSpin={spinRoulette}
         onRemoveGame={removeGame}
+        collapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />
     </div>
   );

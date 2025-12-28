@@ -2,10 +2,15 @@ import { useState } from 'react';
 import { Shuffle, Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { RouletteGame, RouletteSidebarProps } from '../../types/roulette';
 
-export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebarProps) {
+export function RouletteSidebar({
+  games,
+  onSpin,
+  onRemoveGame,
+  collapsed,
+  onToggleCollapse
+}: RouletteSidebarProps) {
   const [selectedGame, setSelectedGame] = useState<RouletteGame | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleSpin = () => {
@@ -62,11 +67,11 @@ export function RouletteSidebar({ games, onSpin, onRemoveGame }: RouletteSidebar
 
         {/* Botão de collapse (apenas desktop) */}
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={onToggleCollapse}
           className="hidden lg:block absolute left-[6px] top-[22px] bg-none opacity-60 hover:opacity-100 transition-opacity"
         >
-          {collapsed 
-            ? <div className="flex -space-x-1"><ChevronLeft size={16} /><ChevronLeft size={16} /></div> 
+          {collapsed
+            ? <div className="flex -space-x-1"><ChevronLeft size={16} /><ChevronLeft size={16} /></div>
             : <div className="flex -space-x-1"><ChevronRight size={16} /><ChevronRight size={16} /></div>
           }
         </button>

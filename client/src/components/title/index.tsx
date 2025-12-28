@@ -1,34 +1,39 @@
 export function BacklogTitle() {
   return (
-    <div className="mb-4 sm:mb-6 lg:mb-8 w-full flex justify-center overflow-x-auto">
-      <pre className="
-        text-[5.5px]                // Muito pequeno no mobile, cabe na largura
-        sm:text-[9px]            // Pouco maior em tablets pequenos
-        md:text-xs                // xs: 0.75rem em tablets/médios
-        lg:text-base                // sm: 0.875rem em desktop
-        xl:text-base              // base: 0rem em telas grandes
-        text-blue-900
-        font-mono
-        leading-none
-        select-none
-        text-center
-        drop-shadow-lg
-        shadow-black
-        px-1
-        ">
-{`██████╗  █████╗  ██████╗██╗  ██╗██╗      ██████╗  ██████╗ 
+    <div className="mb-4 sm:mb-6 lg:mb-8 w-full flex flex-col items-center">
+      <div className="overflow-x-auto w-full flex justify-center scrollbar-hide">
+        <pre
+          className="
+            text-[5.5px]                
+            sm:text-[9px]            
+            md:text-[11px]                
+            lg:text-sm                
+            xl:text-base              
+            text-blue-600
+            font-mono
+            leading-[1.1]
+            select-none
+            text-left
+            drop-shadow-[0_0_15px_rgba(37,99,235,0.2)]
+            px-4
+            inline-block
+          "
+        >
+          {`██████╗  █████╗  ██████╗██╗  ██╗██╗      ██████╗  ██████╗ 
 ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██║     ██╔═══██╗██╔════╝ 
 ██████╔╝███████║██║     █████╔╝ ██║     ██║   ██║██║  ███╗
 ██╔══██╗██╔══██║██║     ██╔═██╗ ██║     ██║   ██║██║   ██║
 ██████╔╝██║  ██║╚██████╗██║  ██╗███████╗╚██████╔╝╚██████╔╝
 ╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝  ╚═════╝ 
+
 ██████╗  ██████╗ ██╗   ██╗██╗     ███████╗████████╗████████╗███████╗
 ██╔══██╗██╔═══██╗██║   ██║██║     ██╔════╝╚══██╔══╝╚══██╔══╝██╔════╝
 ██████╔╝██║   ██║██║   ██║██║     █████╗     ██║      ██║   █████╗  
 ██╔══██╗██║   ██║██║   ██║██║     ██╔══╝     ██║      ██║   ██╔══╝  
 ██║  ██║╚██████╔╝╚██████╔╝███████╗███████╗   ██║      ██║   ███████╗
 ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝      ╚═╝   ╚══════╝`}
-      </pre>
+        </pre>
+      </div>
     </div>
   );
 }
