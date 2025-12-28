@@ -79,7 +79,7 @@ function App() {
       </div>
 
       {/* Área principal centralizada */}
-      <div className={`flex-1 flex flex-col items-center justify-center transition-all duration-300 px-2 sm:px-4 ${isSidebarCollapsed ? 'lg:pr-12' : 'lg:pr-80'}`}>
+      <div className={`flex-1 flex flex-col items-center justify-center transition-all duration-300 px-2 sm:px-4 ${isSidebarCollapsed ? 'lg:pr-12' : 'lg:pr-80 xl:pr-96'}`}>
         <BacklogTitle />
 
         {/* Input de busca */}
