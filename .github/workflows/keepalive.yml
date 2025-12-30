@@ -2,7 +2,7 @@ name: Keep Render
 
 on:
   schedule:
-    - cron: "*/10 * * * *" # a cada 10 minutos
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 jobs:

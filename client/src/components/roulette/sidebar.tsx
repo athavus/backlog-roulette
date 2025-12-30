@@ -90,7 +90,7 @@ export function RouletteSidebar({
                     <Shuffle className="w-8 h-8 text-gray-400" />
                   </div>
                   <p className="font-mono text-sm uppercase tracking-widest text-gray-500">
-                    Empty Backlog
+                    Backlog Vazio
                   </p>
                 </div>
               ) : (
