@@ -35,69 +35,10 @@ const PORT = process.env.PORT || 3001;
 // Necessário para o Passport/Express identificar o protocolo correto (https) atrás do proxy do Render
 app.set("trust proxy", 1);
 
-// Função para validar origens permitidas (CORS)
-const allowedOrigins = (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-  // Permitir requisições sem origem (ex: Postman, mobile apps)
-  if (!origin) {
-    return callback(null, true);
-  }
-
-  // Lista base de origens permitidas
-  const baseAllowed = [
-    // Localhost para desenvolvimento
-    "http://localhost:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:3000",
-  ];
-
-  // Domínio de produção configurado via variável de ambiente
-  const productionUrl = process.env.CLIENT_URL;
-  if (productionUrl) {
-    baseAllowed.push(productionUrl);
-  }
-
-  const allowed = [...baseAllowed];
-
-  // Extrair nome do projeto para validar previews do Vercel
-  // Pode vir de VERCEL_PROJECT_NAME ou ser extraído do CLIENT_URL
-  let projectName: string | null = process.env.VERCEL_PROJECT_NAME || null;
-  
-  if (!projectName && productionUrl) {
-    // Tentar extrair do domínio de produção se for Vercel
-    const vercelMatch = productionUrl.match(/^https?:\/\/([^.]+)\.vercel\.app/);
-    if (vercelMatch) {
-      projectName = vercelMatch[1];
-    }
-  }
-
-  // Verificar se é um preview deployment do Vercel do mesmo projeto
-  let isAllowedVercelPreview = false;
-  if (projectName) {
-    // Permitir apenas previews que comecem EXATAMENTE com o nome do projeto seguido de hífen
-    // Formato: https://{project-name}-{hash}-{user}.vercel.app
-    // Exemplo: https://backlog-roulette-7rfpoc511-miguel-ryans-projects.vercel.app
-    // Isso garante que apenas previews do SEU projeto sejam permitidos, não outros projetos
-    const escapedProjectName = projectName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    // O padrão exige que após o nome do projeto venha um hífen e depois caracteres válidos
-    // Isso previne que projetos com nomes similares sejam aceitos
-    const previewPattern = new RegExp(`^https://${escapedProjectName}-[a-zA-Z0-9-]+\\.vercel\\.app$`);
-    isAllowedVercelPreview = previewPattern.test(origin);
-  }
-
-  // Verificar se a origem está na lista permitida ou é um preview válido do Vercel
-  if (allowed.includes(origin) || isAllowedVercelPreview) {
-    callback(null, true);
-  } else {
-    console.warn(`CORS bloqueado para origem: ${origin}`);
-    callback(new Error("Não permitido pelo CORS"));
-  }
-};
-
-// Middlewares
+// Middlewares - CORS permitindo qualquer origem
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: true, // Permite qualquer origem
     credentials: true,
   }),
 );
