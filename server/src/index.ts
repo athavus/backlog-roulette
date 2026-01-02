@@ -49,22 +49,13 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware de debug para todas as requisicoes
-app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(`[IN] ${req.method} ${req.path}`);
-  if (req.path.includes('/auth/me')) {
-    console.log(`[DEBUG] Origin: ${req.headers.origin}`);
-    console.log(`[DEBUG] Cookie header: ${req.headers.cookie || 'NENHUM'}`);
-    console.log(`[DEBUG] Session ID: ${req.sessionID || 'NENHUM'}`);
-  }
-  next();
-});
+
 
 // Configuracao de sessao com PostgreSQL
 try {
   const PgSession = connectPgSimple(session);
   const isProduction = process.env.NODE_ENV === "production";
-  
+
   app.use(
     session({
       name: "sessionId", // Nome explícito do cookie
@@ -99,6 +90,17 @@ try {
   console.error("Verifique se o DATABASE_URL esta correto");
   throw error;
 }
+
+// Middleware de debug para todas as requisicoes (após session)
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log(`[IN] ${req.method} ${req.path}`);
+  if (req.path.includes('/auth/me')) {
+    console.log(`[DEBUG] Origin: ${req.headers.origin}`);
+    console.log(`[DEBUG] Cookie header: ${req.headers.cookie || 'NENHUM'}`);
+    console.log(`[DEBUG] Session ID: ${req.sessionID || 'NENHUM'}`);
+  }
+  next();
+});
 
 // Inicializar Passport
 app.use(passport.initialize());
