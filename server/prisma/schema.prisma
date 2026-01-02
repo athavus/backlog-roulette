@@ -13,15 +13,12 @@ model User {
   id        String   @id @default(cuid())
   email     String   @unique
   password  String?
-  googleId  String?  @unique
   name      String
-  avatar    String?
   createdAt DateTime @default(now())
   
   rouletteGames RouletteGame[]
 
   @@index([email])
-  @@index([googleId])
 }
 
 model RouletteGame {
@@ -36,4 +33,3 @@ model RouletteGame {
   @@unique([userId, gameId])
   @@index([userId])
 }
-

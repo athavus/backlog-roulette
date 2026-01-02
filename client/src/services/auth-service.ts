@@ -84,10 +84,6 @@ class AuthService {
       return null;
     }
   }
-
-  getGoogleAuthUrl(): string {
-    return `${API_BASE_URL}/auth/google`;
-  }
 }
 
 export default new AuthService();

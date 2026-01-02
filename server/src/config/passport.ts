@@ -1,6 +1,5 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { prisma } from '../lib/prisma.js';
 import { comparePassword } from '../lib/auth.js';
 import { User } from '@prisma/client';
@@ -20,7 +19,7 @@ passport.use(new LocalStrategy(
       }
 
       if (!user.password) {
-        return done(null, false, { message: 'Este email está associado a uma conta Google. Use o login com Google.' });
+        return done(null, false, { message: 'Este email está associado a uma conta externa. Tente recuperar sua senha.' });
       }
 
       const isMatch = await comparePassword(password, user.password);
@@ -35,70 +34,6 @@ passport.use(new LocalStrategy(
     }
   }
 ));
-
-// Estratégia Google OAuth
-if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-  // Construir callback URL completa se não fornecida
-  // Se CLIENT_URL estiver configurado (Vercel), usamos ele para que o cookie seja "first-party"
-  const callbackURL = process.env.GOOGLE_CALLBACK_URL ||
-    (process.env.CLIENT_URL
-      ? `${process.env.CLIENT_URL}/api/auth/google/callback`
-      : `${process.env.API_URL || 'https://backlog-roulette.onrender.com'}/api/auth/google/callback`);
-
-  console.log('[PASSPORT] Google OAuth configurado com callback URL:', callbackURL);
-
-  passport.use(new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      callbackURL: callbackURL
-    },
-    async (accessToken: string, refreshToken: string, profile: any, done: any) => {
-      try {
-        // Verificar se o usuário já existe
-        let user = await prisma.user.findUnique({ where: { googleId: profile.id } });
-
-        if (user) {
-          return done(null, user);
-        }
-
-        // Verificar se existe usuário com o mesmo email
-        const email = profile.emails?.[0]?.value?.toLowerCase();
-        if (!email) {
-          return done(new Error('Email não fornecido pelo Google'));
-        }
-
-        user = await prisma.user.findUnique({ where: { email } });
-
-        if (user) {
-          // Associar Google ID ao usuário existente
-          user = await prisma.user.update({
-            where: { id: user.id },
-            data: {
-              googleId: profile.id,
-              avatar: user.avatar || profile.photos?.[0]?.value || undefined
-            }
-          });
-          return done(null, user);
-        }
-
-        // Criar novo usuário
-        user = await prisma.user.create({
-          data: {
-            googleId: profile.id,
-            email,
-            name: profile.displayName,
-            avatar: profile.photos?.[0]?.value
-          }
-        });
-
-        return done(null, user);
-      } catch (error) {
-        return done(error, null);
-      }
-    }
-  ));
-}
 
 // Serialização do usuário para a sessão
 passport.serializeUser((user: any, done: (err: any, id?: any) => void) => {

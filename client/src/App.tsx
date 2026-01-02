@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { GameSearchInput } from "./components/game-search-input";
 import { GameModal } from "./components/game-modal";
 import { RouletteSidebar } from "./components/roulette/sidebar";
@@ -14,7 +14,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const { user, loading: authLoading, refreshUser } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const {
     games: rouletteGames,
     addGame,
@@ -23,18 +23,7 @@ function App() {
     spinRoulette,
   } = useRoulette();
 
-  // Verificar callback do Google OAuth
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const success = urlParams.get("success");
 
-    if (success === "true") {
-      // Limpar a URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-      // Atualizar o usuário
-      refreshUser();
-    }
-  }, [refreshUser]);
 
   const handleGameSelect = (game: Game) => {
     setSelectedGame(game);

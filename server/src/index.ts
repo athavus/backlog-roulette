@@ -14,7 +14,6 @@ console.log("Variaveis de ambiente:", {
   SESSION_SECRET: process.env.SESSION_SECRET
     ? "Configurado"
     : "NAO CONFIGURADO",
-  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? "Configurado" : "Opcional",
   RAWG_API_KEY: process.env.RAWG_API_KEY ? "Configurado" : "NAO CONFIGURADO",
   CLIENT_URL: process.env.CLIENT_URL || "http://localhost:5173 (padrao)",
 });

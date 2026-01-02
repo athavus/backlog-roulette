@@ -8,7 +8,6 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
-  loginWithGoogle: () => void;
   refreshUser: () => Promise<void>;
 }
 
@@ -48,10 +47,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const loginWithGoogle = () => {
-    window.location.href = authService.getGoogleAuthUrl();
-  };
-
   return (
     <AuthContext.Provider
       value={{
@@ -60,7 +55,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         register,
         logout,
-        loginWithGoogle,
         refreshUser,
       }}
     >
