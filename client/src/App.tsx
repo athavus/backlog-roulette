@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GameSearchInput } from "./components/game-search-input";
 import { GameModal } from "./components/game-modal";
 import { RouletteSidebar } from "./components/roulette/sidebar";
@@ -23,7 +23,12 @@ function App() {
     spinRoulette,
   } = useRoulette();
 
-
+  // Fecha o modal de auth quando o usuário logar/registrar com sucesso
+  useEffect(() => {
+    if (user) {
+      setIsAuthModalOpen(false);
+    }
+  }, [user]);
 
   const handleGameSelect = (game: Game) => {
     setSelectedGame(game);
