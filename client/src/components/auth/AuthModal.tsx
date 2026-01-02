@@ -33,9 +33,15 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             ×
           </button>
           {isLogin ? (
-            <LoginForm onSwitchToRegister={() => setIsLogin(false)} />
+            <LoginForm
+              onSwitchToRegister={() => setIsLogin(false)}
+              onSuccess={onClose}
+            />
           ) : (
-            <RegisterForm onSwitchToLogin={() => setIsLogin(true)} />
+            <RegisterForm
+              onSwitchToLogin={() => setIsLogin(true)}
+              onSuccess={onClose}
+            />
           )}
         </div>
       </div>

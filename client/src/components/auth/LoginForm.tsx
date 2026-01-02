@@ -3,9 +3,10 @@ import { useAuth } from '../../contexts/AuthContext';
 
 interface LoginFormProps {
   onSwitchToRegister: () => void;
+  onSuccess?: () => void;
 }
 
-export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
+export function LoginForm({ onSwitchToRegister, onSuccess }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -19,6 +20,7 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
 
     try {
       await login(email, password);
+      onSuccess?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao fazer login');
     } finally {
