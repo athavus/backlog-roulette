@@ -38,11 +38,17 @@ passport.use(new LocalStrategy(
 
 // Estratégia Google OAuth
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  // Construir callback URL completa se não fornecida
+  const callbackURL = process.env.GOOGLE_CALLBACK_URL || 
+    `${process.env.API_URL || 'https://backlog-roulette.onrender.com'}/api/auth/google/callback`;
+  
+  console.log('[PASSPORT] Google OAuth configurado com callback URL:', callbackURL);
+  
   passport.use(new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL || '/api/auth/google/callback'
+      callbackURL: callbackURL
     },
     async (accessToken: string, refreshToken: string, profile: any, done: any) => {
       try {

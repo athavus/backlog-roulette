@@ -129,6 +129,7 @@ router.get('/google/callback',
     console.log('[GOOGLE CALLBACK] Usuario:', req.user ? req.user.email : 'null');
     console.log('[GOOGLE CALLBACK] isAuthenticated:', req.isAuthenticated());
     console.log('[GOOGLE CALLBACK] Session ID:', req.sessionID);
+    console.log('[GOOGLE CALLBACK] Cookie será definido:', req.session.cookie);
     
     // Garantir que a sessão seja salva antes do redirect
     req.session.save((err) => {
@@ -138,8 +139,15 @@ router.get('/google/callback',
       }
       
       console.log('[GOOGLE CALLBACK] Sessao salva com sucesso');
+      console.log('[GOOGLE CALLBACK] Headers do response:', {
+        'Set-Cookie': res.getHeader('Set-Cookie'),
+        'Access-Control-Allow-Credentials': res.getHeader('Access-Control-Allow-Credentials'),
+      });
+      
       // Redirecionar para o frontend com sucesso
-      res.redirect(`${process.env.CLIENT_URL || 'http://localhost:5173'}/?success=true`);
+      const redirectUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/?success=true`;
+      console.log('[GOOGLE CALLBACK] Redirecionando para:', redirectUrl);
+      res.redirect(redirectUrl);
     });
   }
 );

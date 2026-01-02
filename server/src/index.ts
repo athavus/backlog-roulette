@@ -77,11 +77,12 @@ try {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: isProduction, // true em produção (HTTPS)
+        secure: isProduction, // true em produção (HTTPS) - OBRIGATÓRIO para sameSite: 'none'
         sameSite: isProduction ? "none" : "lax", // "none" permite cross-origin em produção
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
-        // Não definir domain para permitir cross-origin
+        path: '/', // Path deve ser '/' para funcionar em todas as rotas
+        // NÃO definir domain - permite que o cookie funcione cross-origin
       },
     }),
   );
@@ -90,6 +91,8 @@ try {
     secure: isProduction,
     sameSite: isProduction ? "none" : "lax",
     httpOnly: true,
+    path: '/',
+    name: "sessionId",
   });
 } catch (error: any) {
   console.error("Erro ao configurar sessao:", error.message);
