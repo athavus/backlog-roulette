@@ -67,13 +67,13 @@ try {
       secret: process.env.SESSION_SECRET || "your-secret-key",
       resave: false,
       saveUninitialized: false,
+      proxy: true, // Necessário para cookies seguros atrás de proxy (Render/Vercel)
       cookie: {
-        secure: isProduction, // true em produção (HTTPS) - OBRIGATÓRIO para sameSite: 'none'
-        sameSite: isProduction ? "none" : "lax", // "none" permite cross-origin em produção
+        secure: isProduction,
+        sameSite: isProduction ? "lax" : "lax", // 'lax' é melhor agora que usamos proxy no mesmo domínio
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
-        path: '/', // Path deve ser '/' para funcionar em todas as rotas
-        // NÃO definir domain - permite que o cookie funcione cross-origin
+        path: '/',
       },
     }),
   );
@@ -96,8 +96,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   console.log(`[IN] ${req.method} ${req.path}`);
   if (req.path.includes('/auth/me')) {
     console.log(`[DEBUG] Origin: ${req.headers.origin}`);
-    console.log(`[DEBUG] Cookie header: ${req.headers.cookie || 'NENHUM'}`);
-    console.log(`[DEBUG] Session ID: ${req.sessionID || 'NENHUM'}`);
+    console.log(`[DEBUG] Cookie header: ${req.headers.cookie ? 'ENVIADO' : 'NENHUM'}`);
+    console.log(`[DEBUG] Session ID: ${req.sessionID}`);
+    console.log(`[DEBUG] User in Session: ${req.user ? 'SIM' : 'NAO'}`);
+    console.log(`[DEBUG] Passport property: ${req.session && (req.session as any).passport ? 'SIM' : 'NAO'}`);
   }
   next();
 });
