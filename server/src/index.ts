@@ -40,6 +40,9 @@ app.use(
   cors({
     origin: true, // Permite qualquer origem
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Set-Cookie'],
   }),
 );
 
@@ -49,14 +52,22 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware de debug para todas as requisicoes
 app.use((req: Request, res: Response, next: NextFunction) => {
   console.log(`[IN] ${req.method} ${req.path}`);
+  if (req.path.includes('/auth/me')) {
+    console.log(`[DEBUG] Origin: ${req.headers.origin}`);
+    console.log(`[DEBUG] Cookie header: ${req.headers.cookie || 'NENHUM'}`);
+    console.log(`[DEBUG] Session ID: ${req.sessionID || 'NENHUM'}`);
+  }
   next();
 });
 
 // Configuracao de sessao com PostgreSQL
 try {
   const PgSession = connectPgSimple(session);
+  const isProduction = process.env.NODE_ENV === "production";
+  
   app.use(
     session({
+      name: "sessionId", // Nome explícito do cookie
       store: new PgSession({
         conString: process.env.DATABASE_URL,
         tableName: "session",
@@ -66,14 +77,20 @@ try {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: isProduction, // true em produção (HTTPS)
+        sameSite: isProduction ? "none" : "lax", // "none" permite cross-origin em produção
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
+        // Não definir domain para permitir cross-origin
       },
     }),
   );
   console.log("Sessao configurada com PostgreSQL");
+  console.log("Configuracao de cookie:", {
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    httpOnly: true,
+  });
 } catch (error: any) {
   console.error("Erro ao configurar sessao:", error.message);
   console.error("Verifique se o DATABASE_URL esta correto");

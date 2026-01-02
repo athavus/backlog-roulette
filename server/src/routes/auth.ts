@@ -91,10 +91,24 @@ router.post('/logout', (req: Request, res: Response) => {
 });
 
 // Verificar usuário autenticado
-router.get('/me', isAuthenticated, (req: Request, res: Response) => {
+router.get('/me', (req: Request, res: Response) => {
+  console.log('[AUTH/ME] Verificando autenticacao...');
+  console.log('[AUTH/ME] isAuthenticated:', req.isAuthenticated());
+  console.log('[AUTH/ME] req.user:', req.user ? 'existe' : 'null');
+  console.log('[AUTH/ME] Cookies recebidos:', req.headers.cookie ? 'sim' : 'nao');
+  console.log('[AUTH/ME] Origin:', req.headers.origin);
+  
+  if (!req.isAuthenticated()) {
+    console.log('[AUTH/ME] Usuario nao autenticado');
+    return res.status(401).json({ error: 'Não autenticado' });
+  }
+  
   if (!req.user) {
+    console.log('[AUTH/ME] req.user nao existe');
     return res.status(401).json({ error: 'Usuário não encontrado' });
   }
+  
+  console.log('[AUTH/ME] Usuario autenticado:', req.user.email);
   const { password: _, ...userWithoutPassword } = req.user;
   res.json({
     user: userWithoutPassword
@@ -111,8 +125,22 @@ router.get('/google/callback',
     failureRedirect: process.env.CLIENT_URL || 'http://localhost:5173/login?error=google'
   }),
   (req: Request, res: Response) => {
-    // Redirecionar para o frontend com sucesso
-    res.redirect(`${process.env.CLIENT_URL || 'http://localhost:5173'}/?success=true`);
+    console.log('[GOOGLE CALLBACK] Login realizado com sucesso');
+    console.log('[GOOGLE CALLBACK] Usuario:', req.user ? req.user.email : 'null');
+    console.log('[GOOGLE CALLBACK] isAuthenticated:', req.isAuthenticated());
+    console.log('[GOOGLE CALLBACK] Session ID:', req.sessionID);
+    
+    // Garantir que a sessão seja salva antes do redirect
+    req.session.save((err) => {
+      if (err) {
+        console.error('[GOOGLE CALLBACK] Erro ao salvar sessao:', err);
+        return res.redirect(`${process.env.CLIENT_URL || 'http://localhost:5173'}/?error=session`);
+      }
+      
+      console.log('[GOOGLE CALLBACK] Sessao salva com sucesso');
+      // Redirecionar para o frontend com sucesso
+      res.redirect(`${process.env.CLIENT_URL || 'http://localhost:5173'}/?success=true`);
+    });
   }
 );
 
