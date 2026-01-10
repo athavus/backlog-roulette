@@ -1,0 +1,20 @@
+{
+    "name": "Backlog Roulette",
+    "short_name": "BacklogRoulette",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f9fafb",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/assets/logo-backlog-roulette.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/logo-backlog-roulette.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
